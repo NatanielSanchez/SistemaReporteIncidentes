@@ -28,20 +28,14 @@ public class Servicio implements Serializable
     @JoinColumn(name = "id_servicio", nullable = false)
     private List<Problema> problemas;
 
-    public Servicio(String nombre, List<Problema> problemas)
+    public Servicio(String nombre)
     {
         this.nombre = nombre;
-        this.problemas = problemas;
+        this.problemas = new ArrayList<Problema>();
     }
 
-    public void update(String nombre, List<Problema> problemas)
+    public void update(String nombre)
     {
         this.nombre = nombre;
-        if (this.problemas != null) {
-            this.problemas.clear();
-            this.problemas.addAll(problemas);
-        } else {
-            this.problemas = new ArrayList<>(problemas);
-        }
     }
 }

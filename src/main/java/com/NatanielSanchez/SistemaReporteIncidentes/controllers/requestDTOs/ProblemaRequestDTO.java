@@ -21,4 +21,7 @@ public class ProblemaRequestDTO
     @NotEmpty
     private boolean complejo;
 
+    @NotEmpty
+    private long id_servicio;
+
 }

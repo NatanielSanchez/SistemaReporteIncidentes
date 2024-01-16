@@ -74,9 +74,9 @@ public class ClienteService
         List<Servicio> lista = new ArrayList<Servicio>();
         for (int i = 0; i< dto.getId_servicios().length; i++)
         {
-            long id_servicio = dto.getId_servicios()[i];
-            lista.add(servicioRepository.findById(id_servicio)
-                    .orElseThrow(() -> new ResourceNotFoundException("SERVICIO ID: " + id_servicio)));
+            long id = dto.getId_servicios()[i];
+            lista.add(servicioRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("SERVICIO ID: " + id)));
         }
 
         cliente.update(findTipoClienteByTipo(dto.getTipo_cliente().toUpperCase()),

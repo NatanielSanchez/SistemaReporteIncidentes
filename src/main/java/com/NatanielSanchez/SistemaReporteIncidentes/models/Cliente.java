@@ -54,6 +54,7 @@ public class Cliente implements Serializable
         this.nombre = nombre;
         this.email = email;
         this.identificacion = identificacion;
+        //servicios.forEach(x -> {if (!this.servicios.contains(x)) this.servicios.add(x);});
         this.servicios = servicios;
     }
 }

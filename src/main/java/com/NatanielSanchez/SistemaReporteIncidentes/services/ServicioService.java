@@ -2,12 +2,11 @@ package com.NatanielSanchez.SistemaReporteIncidentes.services;
 
 import com.NatanielSanchez.SistemaReporteIncidentes.controllers.requestDTOs.ServicioRequestDTO;
 import com.NatanielSanchez.SistemaReporteIncidentes.controllers.responseDTOs.ServicioResponseDTO;
+import com.NatanielSanchez.SistemaReporteIncidentes.exceptions.DuplicatedResourceException;
 import com.NatanielSanchez.SistemaReporteIncidentes.exceptions.ResourceNotFoundException;
-import com.NatanielSanchez.SistemaReporteIncidentes.models.Problema;
 import com.NatanielSanchez.SistemaReporteIncidentes.models.Servicio;
 import com.NatanielSanchez.SistemaReporteIncidentes.repositories.ServicioRepository;
 import com.NatanielSanchez.SistemaReporteIncidentes.services.mappers.ServicioResponseMapper;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,13 +40,11 @@ public class ServicioService
 
     public ServicioResponseDTO addServicio(ServicioRequestDTO dto)
     {
-        List<Problema> lista_problemas = dto.getProblemas().stream()
-                .map(x -> new Problema(x.getTipo().toUpperCase(),
-                        x.getDescripcion().toUpperCase(), x.getTiempo_maximo_resolucion(),
-                        x.isComplejo()))
-                .toList();
+        String nombre = dto.getNombre().toUpperCase();
+        if (repository.findByNombre(nombre).isPresent())
+            throw new DuplicatedResourceException("SERVICIO \"" + nombre + "\"");
 
-        Servicio nuevo = new Servicio(dto.getNombre().toUpperCase(), lista_problemas);
+        Servicio nuevo = new Servicio(nombre);
         repository.save(nuevo);
         return mapper.apply(nuevo);
     }
@@ -57,13 +54,15 @@ public class ServicioService
         Servicio servicio = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Servicio ID: " + id));
 
-        List<Problema> lista_problemas = dto.getProblemas().stream()
-                .map(x -> new Problema(x.getTipo().toUpperCase(),
-                        x.getDescripcion().toUpperCase(), x.getTiempo_maximo_resolucion(),
-                        x.isComplejo()))
-                .toList();
+        String nombre = dto.getNombre().toUpperCase();
+        /*
+         Si ya se encuentra un servicio con el nombre provisto por el dto,
+         y el nombre provisto por el dto NO COINCIDE con el nombre del servicio a actualizar...
+        */
+        if (repository.findByNombre(nombre).isPresent() && ! servicio.getNombre().equals(nombre))
+            throw new DuplicatedResourceException("SERVICIO \"" + nombre + "\"");
 
-        servicio.update(dto.getNombre().toUpperCase(), lista_problemas);
+        servicio.update(nombre);
         repository.save(servicio);
         return mapper.apply(servicio);
     }

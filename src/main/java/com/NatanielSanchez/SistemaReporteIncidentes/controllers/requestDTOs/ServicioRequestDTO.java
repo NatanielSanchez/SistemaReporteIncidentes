@@ -14,7 +14,4 @@ public class ServicioRequestDTO
 {
     @NotEmpty
     private String nombre;
-    @NotEmpty
-    private List<ProblemaRequestDTO> problemas;
-
 }

@@ -8,16 +8,16 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClienteRequestDTO
+public class ProblemaUpdateRequestDTO
 {
     @NotEmpty
-    String tipo_cliente;
-    @NotEmpty
-    String nombre;
-    @NotEmpty
-    String email;
-    @NotEmpty
-    String identificacion;
+    private String tipo;
 
-    long[] id_servicios;
+    private String descripcion;
+
+    @NotEmpty
+    private long tiempo_maximo_resolucion;
+
+    @NotEmpty
+    private boolean complejo;
 }

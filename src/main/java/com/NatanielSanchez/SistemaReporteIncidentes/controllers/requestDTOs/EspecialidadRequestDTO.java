@@ -8,16 +8,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClienteRequestDTO
+public class EspecialidadRequestDTO
 {
     @NotEmpty
-    String tipo_cliente;
+    private String nombre;
     @NotEmpty
-    String nombre;
-    @NotEmpty
-    String email;
-    @NotEmpty
-    String identificacion;
-
-    long[] id_servicios;
+    private long[] id_problemas;
 }

@@ -2,7 +2,6 @@ package com.NatanielSanchez.SistemaReporteIncidentes.controllers;
 
 import com.NatanielSanchez.SistemaReporteIncidentes.controllers.requestDTOs.ServicioRequestDTO;
 import com.NatanielSanchez.SistemaReporteIncidentes.controllers.responseDTOs.ServicioResponseDTO;
-import com.NatanielSanchez.SistemaReporteIncidentes.exceptions.ResourceNotFoundException;
 import com.NatanielSanchez.SistemaReporteIncidentes.services.ServicioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,7 +51,4 @@ public class ServicioController
     {
         return new ResponseEntity<ServicioResponseDTO>(service.deleteServicio(id), HttpStatus.OK);
     }
-
-
-
 }

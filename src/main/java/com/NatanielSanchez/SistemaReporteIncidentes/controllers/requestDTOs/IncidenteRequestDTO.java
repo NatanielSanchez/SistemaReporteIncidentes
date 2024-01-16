@@ -1,23 +1,24 @@
 package com.NatanielSanchez.SistemaReporteIncidentes.controllers.requestDTOs;
 
+import com.NatanielSanchez.SistemaReporteIncidentes.controllers.responseDTOs.DetalleProblemaResponseDTO;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClienteRequestDTO
+public class IncidenteRequestDTO
 {
     @NotEmpty
-    String tipo_cliente;
+    private long id_cliente;
     @NotEmpty
-    String nombre;
+    private long id_servicio;
     @NotEmpty
-    String email;
+    private long id_tecnico;
     @NotEmpty
-    String identificacion;
-
-    long[] id_servicios;
+    private List<DetalleProblemaRequestDTO> problemas;
 }
