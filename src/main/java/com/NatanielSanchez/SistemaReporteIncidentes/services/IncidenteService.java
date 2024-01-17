@@ -1,7 +1,9 @@
 package com.NatanielSanchez.SistemaReporteIncidentes.services;
 
+import com.NatanielSanchez.SistemaReporteIncidentes.controllers.requestDTOs.DetalleProblemaRequestDTO;
 import com.NatanielSanchez.SistemaReporteIncidentes.controllers.requestDTOs.IncidenteRequestDTO;
 import com.NatanielSanchez.SistemaReporteIncidentes.controllers.responseDTOs.IncidenteResponseDTO;
+import com.NatanielSanchez.SistemaReporteIncidentes.exceptions.InvalidRequestParameterException;
 import com.NatanielSanchez.SistemaReporteIncidentes.exceptions.ResourceNotFoundException;
 import com.NatanielSanchez.SistemaReporteIncidentes.models.*;
 import com.NatanielSanchez.SistemaReporteIncidentes.repositories.*;
@@ -9,6 +11,7 @@ import com.NatanielSanchez.SistemaReporteIncidentes.services.mappers.IncidenteRe
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,21 +53,70 @@ public class IncidenteService
 
     public IncidenteResponseDTO addIncidente(IncidenteRequestDTO dto)
     {
+        //BUSCO AL CLIENTE
         Cliente cliente = clienteRepository.findById(dto.getId_cliente())
                 .orElseThrow(() -> new ResourceNotFoundException("CLIENTE ID: " + dto.getId_cliente()));
 
+        //BUSCO EL SEVICIO
         Servicio servicio = servicioRepository.findById(dto.getId_servicio())
                 .orElseThrow(() -> new ResourceNotFoundException("SERVICIO ID: " + dto.getId_servicio()));
 
+        //VERFICO QUE EL CLIENTE ESTE SUBSCRIPTO AL SERVICIO
+        if(!cliente.getServicios().contains(servicio))
+            throw new InvalidRequestParameterException("El cliente con ID: " + cliente.getId_cliente()
+                    + " no está subscripto al servicio ID: " + servicio.getId_servicio());
+
+        //BUSCO AL TECNICO
         Tecnico tecnico = tecnicoRepository.findById(dto.getId_tecnico())
                 .orElseThrow(() -> new ResourceNotFoundException("TECNICO ID: " + dto.getId_tecnico()));
 
-        if (!cliente.getServicios().contains(servicio) || )
-        ArrayList<Problema> problemas = new ArrayList<>();
+        //INICIALIZO EL INCIDENTE
+        Incidente incidente = new Incidente();
 
-        for(int i = 0; i< dto.getProblemas().size(); i++)
+        //BUSCO Y VERIFICO LOS PROBLEMAS DEL INCIDENTE
+        ArrayList<DetalleProblema> detalleProblemas = new ArrayList<>();
+        for(DetalleProblemaRequestDTO dp_dto : dto.getProblemas())
         {
+            Problema p = problemaRepository.findById(dp_dto.getId_problema())
+                    .orElseThrow(() -> new ResourceNotFoundException("PROBLEMA ID: " + dp_dto.getId_problema()));
 
+            //Si el problema no corresponde al servicio, o no puede ser resuelto por el tecnico, TIRA EXCEPCION
+            if( !servicio.getProblemas().contains(p))
+            {
+                throw new InvalidRequestParameterException("El problema con ID: " + p.getId_problema()
+                        + " no corresponde al servicio con ID: " + servicio.getId_servicio());
+            }
+
+            if( tecnico.getEspecialidades().stream().noneMatch(x-> x.getProblemas().contains(p)) )
+                throw new InvalidRequestParameterException("El tecnico con ID: " + tecnico.getId_tecnico()
+                        + " no puede resolver el problema con ID: " + p.getId_problema());
+
+            // PREPARO LAS ESTIMACIONES DE RESOLUCION DEL PROBLEMA
+            ArrayList<TiempoEstimadoResolucion> estimaciones = new ArrayList<>();
+            for(int i=0; i < dp_dto.getEstimaciones().length; i++)
+            {
+                TiempoEstimadoResolucion estimacion = new TiempoEstimadoResolucion();
+                estimacion.setTiempo_estimado_resolucion(dp_dto.getEstimaciones()[i]);
+                estimaciones.add(estimacion);
+            }
+
+            //CREACION DEL DETALLE_PROBLEMA
+            DetalleProblema detalleProblema = new DetalleProblema();
+            detalleProblema.setIncidente(incidente);
+            detalleProblema.setProblema(p);
+            detalleProblema.setEstimaciones(estimaciones);
+            detalleProblemas.add(detalleProblema);
         }
+
+        //CREACION COMPLETA DEL INCIDENTE (hopefully)
+        incidente.setCliente(cliente);
+        incidente.setServicio(servicio);
+        incidente.setTecnico(tecnico);
+        incidente.setProblemas(detalleProblemas);
+        incidente.setResuelto(false);
+        incidente.setFecha_inicio(LocalDateTime.now());
+
+        incidenteRepository.save(incidente);
+        return incidenteResponseMapper.apply(incidente);
     }
 }

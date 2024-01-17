@@ -12,5 +12,5 @@ public class DetalleProblemaRequestDTO
 {
     @NotEmpty
     private long id_problema;
-    private long[] estimaciones;
+    private int[] estimaciones;
 }

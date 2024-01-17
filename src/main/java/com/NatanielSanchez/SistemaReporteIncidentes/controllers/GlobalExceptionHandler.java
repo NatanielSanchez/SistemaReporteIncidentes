@@ -1,6 +1,7 @@
 package com.NatanielSanchez.SistemaReporteIncidentes.controllers;
 
 import com.NatanielSanchez.SistemaReporteIncidentes.exceptions.DuplicatedResourceException;
+import com.NatanielSanchez.SistemaReporteIncidentes.exceptions.InvalidRequestParameterException;
 import com.NatanielSanchez.SistemaReporteIncidentes.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,5 +19,9 @@ public class GlobalExceptionHandler
     @ExceptionHandler(DuplicatedResourceException.class)
     public ResponseEntity<String> handleDuplicatedResource(DuplicatedResourceException ex) {
         return new ResponseEntity<String>("The resource: \n" + ex.getMessage() + "\n already exists.", HttpStatus.CONFLICT);
+    }
+    @ExceptionHandler(InvalidRequestParameterException.class)
+    public ResponseEntity<String> handleDuplicatedResource(InvalidRequestParameterException ex) {
+        return new ResponseEntity<String>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

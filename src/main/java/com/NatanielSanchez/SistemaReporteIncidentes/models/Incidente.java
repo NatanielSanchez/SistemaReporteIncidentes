@@ -33,7 +33,7 @@ public class Incidente implements Serializable
     private Tecnico tecnico;
 
     // LISTA DE "DetalleProblema" !!!
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL) // CAMBIAR ESTO DESPUES !!!
     @JoinColumn(name = "id_incidente", nullable = false)
     private List<DetalleProblema> problemas;
 
