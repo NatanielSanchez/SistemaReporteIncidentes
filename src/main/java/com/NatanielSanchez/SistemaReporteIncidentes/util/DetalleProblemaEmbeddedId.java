@@ -14,4 +14,6 @@ public class DetalleProblemaEmbeddedId implements Serializable
 {
     private long id_incidente;
     private long id_problema;
+
+
 }

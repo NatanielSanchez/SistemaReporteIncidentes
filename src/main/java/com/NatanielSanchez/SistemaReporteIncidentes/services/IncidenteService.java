@@ -24,15 +24,17 @@ public class IncidenteService
 
     private TecnicoRepository tecnicoRepository;
     private ProblemaRepository problemaRepository;
+    private DetalleProblemaRepository detalleProblemaRepository;
     private IncidenteResponseMapper incidenteResponseMapper;
-    @Autowired
-    public IncidenteService(IncidenteRepository incidenteRepository, ClienteRepository clienteRepository, ServicioRepository servicioRepository, TecnicoRepository tecnicoRepository, ProblemaRepository problemaRepository, IncidenteResponseMapper incidenteResponseMapper)
+
+    public IncidenteService(IncidenteRepository incidenteRepository, ClienteRepository clienteRepository, ServicioRepository servicioRepository, TecnicoRepository tecnicoRepository, ProblemaRepository problemaRepository, DetalleProblemaRepository detalleProblemaRepository, IncidenteResponseMapper incidenteResponseMapper)
     {
         this.incidenteRepository = incidenteRepository;
         this.clienteRepository = clienteRepository;
         this.servicioRepository = servicioRepository;
         this.tecnicoRepository = tecnicoRepository;
         this.problemaRepository = problemaRepository;
+        this.detalleProblemaRepository = detalleProblemaRepository;
         this.incidenteResponseMapper = incidenteResponseMapper;
     }
 
@@ -115,8 +117,12 @@ public class IncidenteService
         incidente.setProblemas(detalleProblemas);
         incidente.setResuelto(false);
         incidente.setFecha_inicio(LocalDateTime.now());
-
+        
         incidenteRepository.save(incidente);
+        for(DetalleProblema dp : incidente.getProblemas())
+        {
+            detalleProblemaRepository.save(dp);
+        }
         return incidenteResponseMapper.apply(incidente);
     }
 }
