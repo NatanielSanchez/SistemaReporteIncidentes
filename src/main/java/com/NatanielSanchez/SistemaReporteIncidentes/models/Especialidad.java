@@ -41,4 +41,8 @@ public class Especialidad
         this.nombre = nombre;
         this.problemas = problemas;
     }
+
+    public boolean esTuProblema(Problema p) {
+        return this.problemas.contains(p);
+    }
 }

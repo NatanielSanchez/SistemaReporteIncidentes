@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -33,8 +34,7 @@ public class Incidente implements Serializable
     private Tecnico tecnico;
 
     // LISTA DE "DetalleProblema" !!!
-    @OneToMany
-    @JoinColumn(name = "id_incidente", nullable = false)
+    @OneToMany(mappedBy = "incidente", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetalleProblema> problemas;
 
     @Column
@@ -43,4 +43,18 @@ public class Incidente implements Serializable
     private boolean resuelto;
     @Column
     private LocalDateTime fecha_resolucion;
+
+    public Incidente(Cliente cliente, Servicio servicio, Tecnico tecnico, LocalDateTime fecha_inicio) {
+        this.cliente = cliente;
+        this.servicio = servicio;
+        this.tecnico = tecnico;
+        this.fecha_inicio = fecha_inicio;
+        this.resuelto = false;
+        this.problemas = new ArrayList<>();
+
+    }
+
+    public void crearDetalleProblema(Problema p, List<TiempoEstimadoResolucion> estimaciones) {
+        problemas.add(new DetalleProblema(this, p, estimaciones));
+    }
 }

@@ -16,22 +16,31 @@ import java.util.List;
 public class DetalleProblema implements Serializable
 {
     @EmbeddedId
-    private DetalleProblemaEmbeddedId detalleProblemaEmbeddedId;
+    private DetalleProblemaEmbeddedId detalleProblemaEmbeddedId = new DetalleProblemaEmbeddedId();
 
     @ManyToOne
     @MapsId("id_incidente")
-    @JoinColumn(name = "id_incidente", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "id_incidente", nullable = false)
     private Incidente incidente;
 
     @ManyToOne
     @MapsId("id_problema")
-    @JoinColumn(name = "id_problema", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "id_problema", nullable = false)
     private Problema problema;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumns({
-            @JoinColumn(name = "id_incidente", referencedColumnName = "id_incidente"),
-            @JoinColumn(name = "id_problema", referencedColumnName = "id_problema")
+            @JoinColumn(name = "id_incidente", referencedColumnName = "id_incidente", nullable = false),
+            @JoinColumn(name = "id_problema", referencedColumnName = "id_problema", nullable = false)
     })
     private List<TiempoEstimadoResolucion> estimaciones;
+
+
+    public DetalleProblema(Incidente incidente, Problema problema, List<TiempoEstimadoResolucion> estimaciones) {
+        this.incidente = incidente;
+        this.problema = problema;
+        this.estimaciones = estimaciones;
+        this.detalleProblemaEmbeddedId = new DetalleProblemaEmbeddedId(incidente.getId_incidente(), problema.getId_problema());
+
+    }
 }

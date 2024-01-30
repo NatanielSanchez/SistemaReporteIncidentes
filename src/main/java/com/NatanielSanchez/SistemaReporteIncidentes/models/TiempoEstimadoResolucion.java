@@ -19,4 +19,8 @@ public class TiempoEstimadoResolucion implements Serializable
 
     @Column
     private int tiempo_estimado_resolucion;
+
+    public TiempoEstimadoResolucion(int tiempo_estimado_resolucion) {
+        this.tiempo_estimado_resolucion = tiempo_estimado_resolucion;
+    }
 }

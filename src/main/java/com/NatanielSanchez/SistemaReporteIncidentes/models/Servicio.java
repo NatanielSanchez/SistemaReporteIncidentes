@@ -38,4 +38,8 @@ public class Servicio implements Serializable
     {
         this.nombre = nombre;
     }
+
+    public boolean esTuProblema(Problema p) {
+        return problemas.contains(p);
+    }
 }

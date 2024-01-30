@@ -53,4 +53,8 @@ public class Tecnico implements Serializable
         this.contacto = contacto;
         this.especialidades = especialidades;
     }
+
+    public boolean puedeResolverProblema(Problema p) {
+        return this.getEspecialidades().stream().anyMatch((e) -> e.esTuProblema(p));
+    }
 }
