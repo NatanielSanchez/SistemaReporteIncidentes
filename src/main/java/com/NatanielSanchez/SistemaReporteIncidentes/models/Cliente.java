@@ -57,4 +57,8 @@ public class Cliente implements Serializable
         //servicios.forEach(x -> {if (!this.servicios.contains(x)) this.servicios.add(x);});
         this.servicios = servicios;
     }
+
+    public boolean esTuServicio(Servicio servicio) {
+        return this.servicios.contains(servicio);
+    }
 }

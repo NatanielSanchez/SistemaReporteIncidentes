@@ -66,7 +66,7 @@ public class IncidenteService
                 .orElseThrow(() -> new ResourceNotFoundException("SERVICIO ID: " + dto.getId_servicio()));
 
         //VERFICO QUE EL CLIENTE ESTE SUBSCRIPTO AL SERVICIO
-        if(!cliente.getServicios().contains(servicio))
+        if(!cliente.esTuServicio(servicio))
             throw new InvalidRequestParameterException("El cliente con ID: " + cliente.getId_cliente()
                     + " no está subscripto al servicio ID: " + servicio.getId_servicio());
 
@@ -95,7 +95,6 @@ public class IncidenteService
                 throw new InvalidRequestParameterException("El tecnico con ID: " + tecnico.getId_tecnico()
                         + " no puede resolver el problema con ID: " + p.getId_problema());
             }
-
             // PREPARO LAS ESTIMACIONES DE RESOLUCION DEL PROBLEMA
             ArrayList<TiempoEstimadoResolucion> estimaciones = new ArrayList<>();
             for(int i=0; i < dp_dto.getEstimaciones().length; i++)
