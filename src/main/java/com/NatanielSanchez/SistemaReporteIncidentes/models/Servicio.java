@@ -31,7 +31,7 @@ public class Servicio implements Serializable
     public Servicio(String nombre)
     {
         this.nombre = nombre;
-        this.problemas = new ArrayList<Problema>();
+        this.problemas = new ArrayList<>();
     }
 
     public void update(String nombre)

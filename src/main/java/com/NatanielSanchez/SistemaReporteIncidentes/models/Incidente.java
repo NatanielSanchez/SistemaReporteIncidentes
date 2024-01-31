@@ -44,17 +44,18 @@ public class Incidente implements Serializable
     @Column
     private LocalDateTime fecha_resolucion;
 
-    public Incidente(Cliente cliente, Servicio servicio, Tecnico tecnico, LocalDateTime fecha_inicio) {
+    public Incidente(Cliente cliente, Servicio servicio, Tecnico tecnico, LocalDateTime fecha_inicio)
+    {
         this.cliente = cliente;
         this.servicio = servicio;
         this.tecnico = tecnico;
         this.fecha_inicio = fecha_inicio;
         this.resuelto = false;
         this.problemas = new ArrayList<>();
-
     }
 
-    public void crearDetalleProblema(Problema p, List<TiempoEstimadoResolucion> estimaciones) {
+    public void crearDetalleProblema(Problema p, List<TiempoEstimadoResolucion> estimaciones)
+    {
         problemas.add(new DetalleProblema(this, p, estimaciones));
     }
 }

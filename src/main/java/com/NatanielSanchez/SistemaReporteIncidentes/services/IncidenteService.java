@@ -95,6 +95,7 @@ public class IncidenteService
                 throw new InvalidRequestParameterException("El tecnico con ID: " + tecnico.getId_tecnico()
                         + " no puede resolver el problema con ID: " + p.getId_problema());
             }
+
             // PREPARO LAS ESTIMACIONES DE RESOLUCION DEL PROBLEMA
             ArrayList<TiempoEstimadoResolucion> estimaciones = new ArrayList<>();
             for(int i=0; i < dp_dto.getEstimaciones().length; i++)
@@ -102,9 +103,10 @@ public class IncidenteService
                 TiempoEstimadoResolucion estimacion = new TiempoEstimadoResolucion(dp_dto.getEstimaciones()[i]);
                 estimaciones.add(estimacion);
             }
-            //CREACION DEL DETALLE_PROBLEMA
+            //CREACION DEL DETALLE_PROBLEMA (delegado al incidente)
             incidente.crearDetalleProblema(p, estimaciones);
         }
+
         incidenteRepository.save(incidente);
         return incidenteResponseMapper.apply(incidente);
     }
