@@ -60,7 +60,7 @@ public class OperadorService
         }
 
         return tecnicoRepository.findAll().stream()
-                .filter( t-> problemas.stream().allMatch(t::puedeResolverProblema) )
+                .filter( t-> t.puedeResolverProblemas(problemas) )
                 .map(tecnicoResponseMapper)
                 .toList();
     }

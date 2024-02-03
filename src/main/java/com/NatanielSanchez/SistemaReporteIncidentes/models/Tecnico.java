@@ -54,7 +54,15 @@ public class Tecnico implements Serializable
         this.especialidades = especialidades;
     }
 
-    public boolean puedeResolverProblema(Problema p) {
-        return this.getEspecialidades().stream().anyMatch((e) -> e.esTuProblema(p));
+    //Verifica si puede resolver un problema particular
+    public boolean puedeResolverProblema(Problema p)
+    {
+        return especialidades.stream().anyMatch((e) -> e.esTuProblema(p));
+    }
+
+    // Verifica si puede resolverun conjunto de problemas
+    public boolean puedeResolverProblemas(List<Problema> problemas)
+    {
+        return problemas.stream().allMatch(this::puedeResolverProblema);
     }
 }
