@@ -35,7 +35,7 @@ public class Incidente implements Serializable
 
     // LISTA DE "DetalleProblema" !!!
     @OneToMany(mappedBy = "incidente", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DetalleProblema> problemas;
+    private List<DetalleProblema> problemas = new ArrayList<>();;
 
     @Column
     private LocalDateTime fecha_inicio;
@@ -43,6 +43,8 @@ public class Incidente implements Serializable
     private boolean resuelto;
     @Column
     private LocalDateTime fecha_resolucion;
+    @Column
+    private String mensaje;
 
     public Incidente(Cliente cliente, Servicio servicio, Tecnico tecnico, LocalDateTime fecha_inicio)
     {
@@ -57,5 +59,14 @@ public class Incidente implements Serializable
     public void crearDetalleProblema(Problema p, List<TiempoEstimadoResolucion> estimaciones)
     {
         problemas.add(new DetalleProblema(this, p, estimaciones));
+    }
+
+    public void resolver(String mensaje)
+    {
+        if (resuelto) return;
+
+        resuelto = true;
+        fecha_resolucion = LocalDateTime.now();
+        this.mensaje = mensaje;
     }
 }

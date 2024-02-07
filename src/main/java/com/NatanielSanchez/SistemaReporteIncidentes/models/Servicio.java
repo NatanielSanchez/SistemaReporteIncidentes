@@ -26,7 +26,7 @@ public class Servicio implements Serializable
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_servicio", nullable = false)
-    private List<Problema> problemas;
+    private List<Problema> problemas = new ArrayList<>();
 
     public Servicio(String nombre)
     {
@@ -39,7 +39,13 @@ public class Servicio implements Serializable
         this.nombre = nombre;
     }
 
-    public boolean esTuProblema(Problema p) {
+    public boolean esTuProblema(Problema p)
+    {
         return problemas.contains(p);
+    }
+
+    public void crearProblema(String tipo, String descripcion, long tiempoMaximoResolucion, boolean complejo)
+    {
+        problemas.add(new Problema(tipo, descripcion, tiempoMaximoResolucion, complejo));
     }
 }

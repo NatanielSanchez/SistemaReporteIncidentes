@@ -19,4 +19,5 @@ public class IncidenteResponseDTO
     private String fecha_inicio;
     private boolean resuelto;
     private String fecha_resolucion;
+    private String mensaje;
 }

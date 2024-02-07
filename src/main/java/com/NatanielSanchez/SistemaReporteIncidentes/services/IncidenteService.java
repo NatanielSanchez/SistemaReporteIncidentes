@@ -110,4 +110,18 @@ public class IncidenteService
         incidenteRepository.save(incidente);
         return incidenteResponseMapper.apply(incidente);
     }
+
+    public IncidenteResponseDTO resolverIncidente(Long id, String mensaje)
+    {
+        Incidente incidente = incidenteRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("INCIDENTE ID: " + id));
+
+        if(incidente.isResuelto())
+            throw new InvalidRequestParameterException("El incidente con ID: " + incidente.getId_incidente()
+                    + " ya ha sido resuelto en fecha: " + incidente.getFecha_resolucion());
+
+        incidente.resolver(mensaje);
+        incidenteRepository.save(incidente);
+        return incidenteResponseMapper.apply(incidente);
+    }
 }

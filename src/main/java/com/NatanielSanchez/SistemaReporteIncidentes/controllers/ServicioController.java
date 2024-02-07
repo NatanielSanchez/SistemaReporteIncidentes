@@ -1,6 +1,7 @@
 package com.NatanielSanchez.SistemaReporteIncidentes.controllers;
 
 import com.NatanielSanchez.SistemaReporteIncidentes.controllers.requestDTOs.ServicioRequestDTO;
+import com.NatanielSanchez.SistemaReporteIncidentes.controllers.requestDTOs.ServicioUpdateRequestDTO;
 import com.NatanielSanchez.SistemaReporteIncidentes.controllers.responseDTOs.ServicioResponseDTO;
 import com.NatanielSanchez.SistemaReporteIncidentes.services.ServicioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class ServicioController
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ServicioResponseDTO> updateServicio(@PathVariable long id, @RequestBody ServicioRequestDTO dto)
+    public ResponseEntity<ServicioResponseDTO> updateServicio(@PathVariable long id, @RequestBody ServicioUpdateRequestDTO dto)
     {
         return new ResponseEntity<ServicioResponseDTO>(service.updateServicio(id, dto), HttpStatus.OK);
     }

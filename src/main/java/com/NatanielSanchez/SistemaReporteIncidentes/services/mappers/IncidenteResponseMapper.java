@@ -31,6 +31,9 @@ public class IncidenteResponseMapper implements Function<Incidente, IncidenteRes
         if (incidente.isResuelto()) fecha_resolucion = incidente.getFecha_resolucion().toString();
         else fecha_resolucion = "------";
 
+        String mensaje = incidente.getMensaje();
+        if ( mensaje == null || mensaje.isEmpty() ) mensaje = "------";
+
         return new IncidenteResponseDTO(incidente.getId_incidente(),
                 incidente.getCliente().getId_cliente(),
                 incidente.getServicio().getId_servicio(),
@@ -38,6 +41,7 @@ public class IncidenteResponseMapper implements Function<Incidente, IncidenteRes
                 lista,
                 incidente.getFecha_inicio().toString(),
                 incidente.isResuelto(),
-                fecha_resolucion);
+                fecha_resolucion,
+                mensaje);
     }
 }

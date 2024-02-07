@@ -39,4 +39,11 @@ public class IncidenteController
     {
         return new ResponseEntity<>(service.addIncidente(dto), HttpStatus.OK);
     }
+
+    @PatchMapping("{id}")
+    public ResponseEntity<IncidenteResponseDTO> resolverIncidente(@RequestParam Long id, @RequestBody String mensaje)
+    {
+        if (mensaje == null || mensaje.isEmpty()) mensaje = "------";
+        return new ResponseEntity<>(service.resolverIncidente(id, mensaje), HttpStatus.OK);
+    }
 }

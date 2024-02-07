@@ -5,15 +5,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ServicioRequestDTO
+public class ProblemaServicioRequestDTO
 {
     @NotEmpty
-    private String nombre;
+    private String tipo;
 
-    private List<ProblemaServicioRequestDTO> problemas;
+    private String descripcion;
+
+    @NotEmpty
+    private long tiempo_maximo_resolucion;
+
+    @NotEmpty
+    private boolean complejo;
 }

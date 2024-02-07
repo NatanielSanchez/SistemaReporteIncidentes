@@ -12,12 +12,12 @@ import java.util.function.Function;
 @Service
 public class ServicioResponseMapper implements Function<Servicio, ServicioResponseDTO>
 {
-    private final ProblemaResponseMapper mapper;
+    private final ProblemaResponseMapper problemaResponseMapper;
 
     @Autowired
     public ServicioResponseMapper(ProblemaResponseMapper mapper)
     {
-        this.mapper = mapper;
+        this.problemaResponseMapper = mapper;
     }
 
     @Override
@@ -25,7 +25,7 @@ public class ServicioResponseMapper implements Function<Servicio, ServicioRespon
     {
         List<ProblemaResponseDTO> lista =
                 servicio.getProblemas().stream()
-                        .map(mapper)
+                        .map(problemaResponseMapper)
                         .toList();
 
         return new ServicioResponseDTO(servicio.getId_servicio(), servicio.getNombre(), lista);

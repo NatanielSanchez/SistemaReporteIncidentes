@@ -1,6 +1,8 @@
 package com.NatanielSanchez.SistemaReporteIncidentes.services;
 
+import com.NatanielSanchez.SistemaReporteIncidentes.controllers.requestDTOs.ProblemaServicioRequestDTO;
 import com.NatanielSanchez.SistemaReporteIncidentes.controllers.requestDTOs.ServicioRequestDTO;
+import com.NatanielSanchez.SistemaReporteIncidentes.controllers.requestDTOs.ServicioUpdateRequestDTO;
 import com.NatanielSanchez.SistemaReporteIncidentes.controllers.responseDTOs.ServicioResponseDTO;
 import com.NatanielSanchez.SistemaReporteIncidentes.exceptions.DuplicatedResourceException;
 import com.NatanielSanchez.SistemaReporteIncidentes.exceptions.ResourceNotFoundException;
@@ -38,18 +40,26 @@ public class ServicioService
         return mapper.apply(servicio);
     }
 
-    public ServicioResponseDTO addServicio(ServicioRequestDTO dto)
+    public ServicioResponseDTO addServicio(ServicioRequestDTO servicioRequestDTO)
     {
-        String nombre = dto.getNombre().toUpperCase();
+        String nombre = servicioRequestDTO.getNombre().toUpperCase();
         if (repository.findByNombre(nombre).isPresent())
             throw new DuplicatedResourceException("SERVICIO \"" + nombre + "\"");
 
-        Servicio nuevo = new Servicio(nombre);
-        repository.save(nuevo);
-        return mapper.apply(nuevo);
+        Servicio servicio = new Servicio(nombre);
+        for (ProblemaServicioRequestDTO dto : servicioRequestDTO.getProblemas())
+        {
+            servicio.crearProblema(dto.getTipo(),
+                    dto.getDescripcion(),
+                    dto.getTiempo_maximo_resolucion(),
+                    dto.isComplejo());
+        }
+
+        repository.save(servicio);
+        return mapper.apply(servicio);
     }
 
-    public ServicioResponseDTO updateServicio(long id, ServicioRequestDTO dto)
+    public ServicioResponseDTO updateServicio(long id, ServicioUpdateRequestDTO dto)
     {
         Servicio servicio = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Servicio ID: " + id));
