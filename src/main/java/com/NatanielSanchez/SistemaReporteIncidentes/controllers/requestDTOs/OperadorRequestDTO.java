@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -14,5 +13,5 @@ import java.util.List;
 public class OperadorRequestDTO
 {
     @NotEmpty
-    List<Long> id_problemas = new ArrayList<>();
+    List<Long> idProblemas;
 }

@@ -27,7 +27,7 @@ public class TecnicoController
         return new ResponseEntity<>(service.getAllTecnicos(), HttpStatus.OK);
     }
     @GetMapping("{id}")
-    public ResponseEntity<TecnicoResponseDTO> getTecnicoById(@PathVariable long id)
+    public ResponseEntity<TecnicoResponseDTO> getTecnicoById(@PathVariable Long id)
     {
         return new ResponseEntity<>(service.getTecnicoById(id), HttpStatus.OK);
     }
@@ -37,12 +37,12 @@ public class TecnicoController
         return new ResponseEntity<>(service.addTecnico(dto), HttpStatus.OK);
     }
     @PutMapping("{id}")
-    public ResponseEntity<TecnicoResponseDTO> updateTecnico(@PathVariable long id, @RequestBody TecnicoRequestDTO dto)
+    public ResponseEntity<TecnicoResponseDTO> updateTecnico(@PathVariable Long id, @RequestBody TecnicoRequestDTO dto)
     {
         return new ResponseEntity<>(service.updateTecnico(id, dto), HttpStatus.OK);
     }
     @DeleteMapping("{id}")
-    public ResponseEntity<TecnicoResponseDTO> deleteTecnico(@PathVariable long id)
+    public ResponseEntity<TecnicoResponseDTO> deleteTecnico(@PathVariable Long id)
     {
         return new ResponseEntity<>(service.deleteTecnico(id), HttpStatus.OK);
     }

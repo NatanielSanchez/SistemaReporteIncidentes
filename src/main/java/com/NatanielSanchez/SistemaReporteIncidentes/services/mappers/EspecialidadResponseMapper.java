@@ -21,7 +21,7 @@ public class EspecialidadResponseMapper implements Function<Especialidad, Especi
     @Override
     public EspecialidadResponseDTO apply(Especialidad especialidad)
     {
-        return new EspecialidadResponseDTO(especialidad.getId_especialidad(),
+        return new EspecialidadResponseDTO(especialidad.getIdEspecialidad(),
                 especialidad.getNombre(),
                 especialidad.getProblemas().stream().map(problemaResponseMapper).toList());
     }

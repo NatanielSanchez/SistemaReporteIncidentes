@@ -19,12 +19,12 @@ public class DetalleProblema implements Serializable
     private DetalleProblemaEmbeddedId detalleProblemaEmbeddedId = new DetalleProblemaEmbeddedId();
 
     @ManyToOne
-    @MapsId("id_incidente")
+    @MapsId("idIncidente")
     @JoinColumn(name = "id_incidente", nullable = false)
     private Incidente incidente;
 
     @ManyToOne
-    @MapsId("id_problema")
+    @MapsId("idProblema")
     @JoinColumn(name = "id_problema", nullable = false)
     private Problema problema;
 
@@ -40,7 +40,7 @@ public class DetalleProblema implements Serializable
         this.incidente = incidente;
         this.problema = problema;
         this.estimaciones = estimaciones;
-        this.detalleProblemaEmbeddedId = new DetalleProblemaEmbeddedId(incidente.getId_incidente(), problema.getId_problema());
+        this.detalleProblemaEmbeddedId = new DetalleProblemaEmbeddedId(incidente.getIdIncidente(), problema.getIdProblema());
 
     }
 }

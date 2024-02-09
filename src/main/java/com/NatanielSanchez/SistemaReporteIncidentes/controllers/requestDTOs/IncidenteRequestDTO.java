@@ -1,6 +1,5 @@
 package com.NatanielSanchez.SistemaReporteIncidentes.controllers.requestDTOs;
 
-import com.NatanielSanchez.SistemaReporteIncidentes.controllers.responseDTOs.DetalleProblemaResponseDTO;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,11 +13,11 @@ import java.util.List;
 public class IncidenteRequestDTO
 {
     @NotEmpty
-    private long id_cliente;
+    private Long idCliente;
     @NotEmpty
-    private long id_servicio;
+    private Long idServicio;
     @NotEmpty
-    private long id_tecnico;
+    private Long idTecnico;
     @NotEmpty
     private List<DetalleProblemaRequestDTO> problemas;
 }

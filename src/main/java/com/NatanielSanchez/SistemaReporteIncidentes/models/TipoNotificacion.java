@@ -16,8 +16,8 @@ public class TipoNotificacion implements Serializable
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
-    private long id_tipo_notificacion;
+    @Column(name = "id_tipo_notificacion", nullable = false)
+    private long idTipoNotificacion;
 
     @Column
     private String tipo;

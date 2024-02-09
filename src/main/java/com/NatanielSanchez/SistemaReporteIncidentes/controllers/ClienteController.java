@@ -29,7 +29,7 @@ public class ClienteController
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClienteResponseDTO> getClienteById(@PathVariable long id)
+    public ResponseEntity<ClienteResponseDTO> getClienteById(@PathVariable Long id)
     {
         return new ResponseEntity<ClienteResponseDTO>(service.getClienteById(id), HttpStatus.OK);
     }
@@ -41,13 +41,13 @@ public class ClienteController
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClienteResponseDTO> updateCliente(@PathVariable long id, @RequestBody ClienteRequestDTO dto)
+    public ResponseEntity<ClienteResponseDTO> updateCliente(@PathVariable Long id, @RequestBody ClienteRequestDTO dto)
     {
         return new ResponseEntity<ClienteResponseDTO>(service.updateCliente(id, dto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ClienteResponseDTO> deleteCliente(@PathVariable long id)
+    public ResponseEntity<ClienteResponseDTO> deleteCliente(@PathVariable Long id)
     {
         return new ResponseEntity<ClienteResponseDTO>(service.deleteCliente(id), HttpStatus.OK);
     }

@@ -17,12 +17,12 @@ public class Cliente implements Serializable
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
-    private long id_cliente;
+    @Column(name = "id_cliente", nullable = false)
+    private long idCliente;
 
     @ManyToOne
     @JoinColumn(name = "id_tipo_cliente")
-    private TipoCliente tipo_cliente;
+    private TipoCliente tipoCliente;
 
     @Column
     private String nombre;
@@ -39,22 +39,21 @@ public class Cliente implements Serializable
     )
     private List<Servicio> servicios;
 
-    public Cliente(TipoCliente tipo_cliente, String nombre, String email, String identificacion, List<Servicio> servicios)
+    public Cliente(TipoCliente tipoCliente, String nombre, String email, String identificacion, List<Servicio> servicios)
     {
-        this.tipo_cliente = tipo_cliente;
+        this.tipoCliente = tipoCliente;
         this.nombre = nombre;
         this.email = email;
         this.identificacion = identificacion;
         this.servicios = servicios;
     }
 
-    public void update(TipoCliente tipo_cliente, String nombre, String email, String identificacion, List<Servicio> servicios)
+    public void update(TipoCliente tipoCliente, String nombre, String email, String identificacion, List<Servicio> servicios)
     {
-        this.tipo_cliente = tipo_cliente;
+        this.tipoCliente = tipoCliente;
         this.nombre = nombre;
         this.email = email;
         this.identificacion = identificacion;
-        //servicios.forEach(x -> {if (!this.servicios.contains(x)) this.servicios.add(x);});
         this.servicios = servicios;
     }
 

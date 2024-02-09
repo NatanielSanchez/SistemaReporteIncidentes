@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class EspecialidadResponseDTO
 {
-    private long id_especialidad;
+    private long idEspecialidad;
     private String nombre;
     private List<ProblemaResponseDTO> problemas;
 }

@@ -11,9 +11,9 @@ import java.util.List;
 @NoArgsConstructor
 public class TecnicoResponseDTO
 {
-    private long id_tecnico;
+    private long idTecnico;
     private String nombre;
-    private String tipo_notificacion;
+    private String tipoNotificacion;
     private String contacto;
     private List<EspecialidadResponseDTO> especialdades;
 }

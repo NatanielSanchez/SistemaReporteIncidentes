@@ -13,7 +13,6 @@ import com.NatanielSanchez.SistemaReporteIncidentes.services.mappers.TecnicoResp
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -40,7 +39,7 @@ public class TecnicoService
                 .toList();
     }
 
-    public TecnicoResponseDTO getTecnicoById(long id)
+    public TecnicoResponseDTO getTecnicoById(Long id)
     {
         Tecnico tecnico = tecnicoRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("TECNICO ID: " + id));
@@ -49,17 +48,13 @@ public class TecnicoService
 
     public TecnicoResponseDTO addTecnico(TecnicoRequestDTO dto)
     {
-        TipoNotificacion tipoNotificacion = tipoNotificacionRepository.findByTipo(dto.getTipo_notificacion().toUpperCase())
-                .orElseThrow(()-> new ResourceNotFoundException("TIPO NOTIFICACION: " + dto.getTipo_notificacion().toUpperCase()));
+        TipoNotificacion tipoNotificacion = tipoNotificacionRepository.findByTipo(dto.getTipoNotificacion().toUpperCase())
+                .orElseThrow(()-> new ResourceNotFoundException("TIPO NOTIFICACION: " + dto.getTipoNotificacion().toUpperCase()));
 
-        List<Especialidad> especialidades = new ArrayList<>();
-        for(int i = 0; i < dto.getId_especialidades().length; i++)
-        {
-            long id_especialidad = dto.getId_especialidades()[i];
-            Especialidad especialidad = especialidadRepository.findById(id_especialidad)
-                    .orElseThrow(()-> new ResourceNotFoundException("ESPECIALIDAD ID: " + id_especialidad));
-            especialidades.add(especialidad);
-        }
+        List<Especialidad> especialidades = dto.getIdEspecialidades().stream()
+                .map(id -> especialidadRepository.findById(id)
+                        .orElseThrow(()-> new ResourceNotFoundException("ESPECIALIDAD ID: " + id)))
+                .toList();
 
         Tecnico tecnico = new Tecnico(dto.getNombre().toUpperCase(),
                 tipoNotificacion,
@@ -71,22 +66,18 @@ public class TecnicoService
     }
 
 
-    public TecnicoResponseDTO updateTecnico(long id_tecnico, TecnicoRequestDTO dto)
+    public TecnicoResponseDTO updateTecnico(Long id_tecnico, TecnicoRequestDTO dto)
     {
         Tecnico tecnico = tecnicoRepository.findById(id_tecnico)
                 .orElseThrow(()-> new ResourceNotFoundException("TECNICO ID: " + id_tecnico));
 
-        TipoNotificacion tipoNotificacion = tipoNotificacionRepository.findByTipo(dto.getTipo_notificacion().toUpperCase())
-                .orElseThrow(()-> new ResourceNotFoundException("TIPO NOTIFICACION: " + dto.getTipo_notificacion().toUpperCase()));
+        TipoNotificacion tipoNotificacion = tipoNotificacionRepository.findByTipo(dto.getTipoNotificacion().toUpperCase())
+                .orElseThrow(()-> new ResourceNotFoundException("TIPO NOTIFICACION: " + dto.getTipoNotificacion().toUpperCase()));
 
-        List<Especialidad> especialidades = new ArrayList<>();
-        for(int i = 0; i < dto.getId_especialidades().length; i++)
-        {
-            long id_especialidad = dto.getId_especialidades()[i];
-            Especialidad especialidad = especialidadRepository.findById(id_especialidad)
-                    .orElseThrow(()-> new ResourceNotFoundException("ESPECIALIDAD ID: " + id_especialidad));
-            especialidades.add(especialidad);
-        }
+        List<Especialidad> especialidades = dto.getIdEspecialidades().stream()
+                .map(id -> especialidadRepository.findById(id)
+                        .orElseThrow(()-> new ResourceNotFoundException("ESPECIALIDAD ID: " + id)))
+                .toList();
 
         tecnico.update(dto.getNombre().toUpperCase(),
                 tipoNotificacion,
@@ -96,7 +87,7 @@ public class TecnicoService
         return mapper.apply(tecnico);
     }
 
-    public TecnicoResponseDTO deleteTecnico(long id)
+    public TecnicoResponseDTO deleteTecnico(Long id)
     {
         Tecnico tecnico = tecnicoRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("TECNICO ID: " + id));

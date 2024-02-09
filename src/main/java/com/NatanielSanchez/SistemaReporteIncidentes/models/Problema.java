@@ -16,8 +16,8 @@ public class Problema implements Serializable
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private long id_problema;
+    @Column(name = "id_problema")
+    private long idProblema;
 
     @Column
     private String tipo;
@@ -30,17 +30,17 @@ public class Problema implements Serializable
     simplemente un long que contiene una cantidad de minutos.
     En la tabla se almacena como un BIGINT (equivalente a un long), en minutos tambien.
      */
-    @Column
-    private long tiempo_maximo_resolucion;
+    @Column(name = "tiempo_maximo_resolucion")
+    private long tiempoMaximoResolucion;
 
     @Column
     private boolean complejo;
 
-    public Problema(String tipo, String descripcion, long tiempo_maximo_resolucion, boolean complejo)
+    public Problema(String tipo, String descripcion, long tiempoMaximoResolucion, boolean complejo)
     {
         this.tipo = tipo;
         this.descripcion = descripcion;
-        this.tiempo_maximo_resolucion = tiempo_maximo_resolucion;
+        this.tiempoMaximoResolucion = tiempoMaximoResolucion;
         this.complejo = complejo;
     }
 }

@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProblemaService
@@ -37,7 +36,7 @@ public class ProblemaService
                 .toList();
     }
 
-    public ProblemaResponseDTO getProblemaById(long id)
+    public ProblemaResponseDTO getProblemaById(Long id)
     {
         Problema p = problemaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("PROBLEMA ID: " + id));
@@ -48,13 +47,13 @@ public class ProblemaService
 
     public ProblemaResponseDTO addProblema(ProblemaRequestDTO dto)
     {
-        Servicio s = servicioRepository.findById(dto.getId_servicio())
-                .orElseThrow(() -> new ResourceNotFoundException("SERVICIO ID: " + dto.getId_servicio()));
+        Servicio s = servicioRepository.findById(dto.getIdServicio())
+                .orElseThrow(() -> new ResourceNotFoundException("SERVICIO ID: " + dto.getIdServicio()));
 
         Problema p = new Problema();
         p.setTipo(dto.getTipo().toUpperCase());
         p.setDescripcion(dto.getDescripcion().toUpperCase());
-        p.setTiempo_maximo_resolucion(dto.getTiempo_maximo_resolucion());
+        p.setTiempoMaximoResolucion(dto.getTiempoMaximoResolucion());
         p.setComplejo(dto.isComplejo());
 
         s.getProblemas().add(p);
@@ -62,21 +61,21 @@ public class ProblemaService
         return mapper.apply(p);
     }
 
-    public ProblemaResponseDTO updateProblema(long id_problema, ProblemaUpdateRequestDTO dto)
+    public ProblemaResponseDTO updateProblema(Long id_problema, ProblemaUpdateRequestDTO dto)
     {
         Problema p = problemaRepository.findById(id_problema)
                 .orElseThrow(() -> new ResourceNotFoundException("PROBLEMA ID: " + id_problema));
 
         p.setTipo(dto.getTipo().toUpperCase());
         p.setDescripcion(dto.getDescripcion().toUpperCase());
-        p.setTiempo_maximo_resolucion(dto.getTiempo_maximo_resolucion());
+        p.setTiempoMaximoResolucion(dto.getTiempoMaximoResolucion());
         p.setComplejo(dto.isComplejo());
 
         problemaRepository.save(p);
         return mapper.apply(p);
     }
 
-    public ProblemaResponseDTO deleteProblema(long id)
+    public ProblemaResponseDTO deleteProblema(Long id)
     {
         Problema p = problemaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("PROBLEMA ID: " + id));

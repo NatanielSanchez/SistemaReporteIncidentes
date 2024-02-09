@@ -30,7 +30,7 @@ public class ServicioController
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ServicioResponseDTO> getServicioById(@PathVariable long id)
+    public ResponseEntity<ServicioResponseDTO> getServicioById(@PathVariable Long id)
     {
         return new ResponseEntity<ServicioResponseDTO>(service.getServicioById(id), HttpStatus.OK);
     }
@@ -42,13 +42,14 @@ public class ServicioController
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ServicioResponseDTO> updateServicio(@PathVariable long id, @RequestBody ServicioUpdateRequestDTO dto)
+    public ResponseEntity<ServicioResponseDTO>
+        updateServicio(@PathVariable Long id, @RequestBody ServicioUpdateRequestDTO dto)
     {
         return new ResponseEntity<ServicioResponseDTO>(service.updateServicio(id, dto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ServicioResponseDTO> deleteServicio(@PathVariable long id)
+    public ResponseEntity<ServicioResponseDTO> deleteServicio(@PathVariable Long id)
     {
         return new ResponseEntity<ServicioResponseDTO>(service.deleteServicio(id), HttpStatus.OK);
     }

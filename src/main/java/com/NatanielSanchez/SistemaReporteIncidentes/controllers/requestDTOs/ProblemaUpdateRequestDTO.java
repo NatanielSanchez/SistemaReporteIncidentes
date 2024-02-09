@@ -16,7 +16,7 @@ public class ProblemaUpdateRequestDTO
     private String descripcion;
 
     @NotEmpty
-    private long tiempo_maximo_resolucion;
+    private Long tiempoMaximoResolucion;
 
     @NotEmpty
     private boolean complejo;

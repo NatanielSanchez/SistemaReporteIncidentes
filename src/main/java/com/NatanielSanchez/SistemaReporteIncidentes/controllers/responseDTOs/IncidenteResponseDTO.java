@@ -11,13 +11,13 @@ import java.util.List;
 @NoArgsConstructor
 public class IncidenteResponseDTO
 {
-    private long id_incidente;
-    private long id_cliente;
-    private long id_servicio;
-    private long id_tecnico;
+    private long idIncidente;
+    private long idCliente;
+    private long idServicio;
+    private long idTecnico;
     private List<DetalleProblemaResponseDTO> problemas;
-    private String fecha_inicio;
+    private String fechaInicio;
     private boolean resuelto;
-    private String fecha_resolucion;
+    private String fechaResolucion;
     private String mensaje;
 }

@@ -17,15 +17,15 @@ public class Tecnico implements Serializable
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private long id_tecnico;
+    @Column(name = "id_tecnico")
+    private long idTecnico;
 
     @Column
     private String nombre;
 
     @ManyToOne
     @JoinColumn(name = "id_tipo_notificacion")
-    private TipoNotificacion tipo_notificacion;
+    private TipoNotificacion tipoNotificacion;
 
     @Column
     private String contacto;
@@ -38,18 +38,18 @@ public class Tecnico implements Serializable
     )
     private List<Especialidad> especialidades;
 
-    public Tecnico(String nombre, TipoNotificacion tipo_notificacion, String contacto, List<Especialidad> especialidades)
+    public Tecnico(String nombre, TipoNotificacion tipoNotificacion, String contacto, List<Especialidad> especialidades)
     {
         this.nombre = nombre;
-        this.tipo_notificacion = tipo_notificacion;
+        this.tipoNotificacion = tipoNotificacion;
         this.contacto = contacto;
         this.especialidades = especialidades;
     }
 
-    public void update(String nombre, TipoNotificacion tipo_notificacion, String contacto, List<Especialidad> especialidades)
+    public void update(String nombre, TipoNotificacion tipoNotificacion, String contacto, List<Especialidad> especialidades)
     {
         this.nombre = nombre;
-        this.tipo_notificacion = tipo_notificacion;
+        this.tipoNotificacion = tipoNotificacion;
         this.contacto = contacto;
         this.especialidades = especialidades;
     }

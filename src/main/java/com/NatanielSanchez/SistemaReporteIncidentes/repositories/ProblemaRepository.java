@@ -7,6 +7,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface ProblemaRepository extends JpaRepository<Problema, Long>
 {
-    @Query(value = "SELECT s.id_servicio FROM Servicio s JOIN s.problemas p WHERE p.id_problema = :id_problema")
-    long findIdServicioByIdProblema(@Param("id_problema") long id_problema);
+    /*@Query(value = "SELECT s.idServicio FROM Servicio s JOIN s.problemas p WHERE p.idProblema = :idProblema")
+    long findIdServicioByIdProblema(@Param("idProblema") Long idProblema);*/
 }

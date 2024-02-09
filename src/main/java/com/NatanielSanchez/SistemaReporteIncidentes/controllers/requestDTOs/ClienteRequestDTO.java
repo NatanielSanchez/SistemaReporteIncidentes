@@ -5,13 +5,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClienteRequestDTO
 {
     @NotEmpty
-    String tipo_cliente;
+    String tipoCliente;
     @NotEmpty
     String nombre;
     @NotEmpty
@@ -19,5 +21,5 @@ public class ClienteRequestDTO
     @NotEmpty
     String identificacion;
 
-    long[] id_servicios;
+    List<Long> idServicios;
 }

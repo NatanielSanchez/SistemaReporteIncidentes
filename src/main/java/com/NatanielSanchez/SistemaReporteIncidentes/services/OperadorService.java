@@ -6,7 +6,6 @@ import com.NatanielSanchez.SistemaReporteIncidentes.controllers.responseDTOs.Tec
 import com.NatanielSanchez.SistemaReporteIncidentes.exceptions.ResourceNotFoundException;
 import com.NatanielSanchez.SistemaReporteIncidentes.models.Cliente;
 import com.NatanielSanchez.SistemaReporteIncidentes.models.Problema;
-import com.NatanielSanchez.SistemaReporteIncidentes.models.Tecnico;
 import com.NatanielSanchez.SistemaReporteIncidentes.repositories.ClienteRepository;
 import com.NatanielSanchez.SistemaReporteIncidentes.repositories.ProblemaRepository;
 import com.NatanielSanchez.SistemaReporteIncidentes.repositories.ServicioRepository;
@@ -53,7 +52,7 @@ public class OperadorService
     public List<TecnicoResponseDTO> buscarTecnico(OperadorRequestDTO dto)
     {
         List<Problema> problemas = new ArrayList<>();
-        for (Long id : dto.getId_problemas())
+        for (Long id : dto.getIdProblemas())
         {
             problemas.add( problemaRepository.findById(id)
                     .orElseThrow(()-> new ResourceNotFoundException("PROBLEMA ID: " + id)) );

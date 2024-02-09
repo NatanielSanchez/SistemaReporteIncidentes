@@ -27,7 +27,7 @@ public class EspecialidadController
         return new ResponseEntity<>(service.getAllEspecialidades(), HttpStatus.OK);
     }
     @GetMapping("{id}")
-    public ResponseEntity<EspecialidadResponseDTO> getEspecialidadById(@PathVariable long id)
+    public ResponseEntity<EspecialidadResponseDTO> getEspecialidadById(@PathVariable Long id)
     {
         return new ResponseEntity<>(service.getEspecialidadById(id), HttpStatus.OK);
     }
@@ -39,13 +39,13 @@ public class EspecialidadController
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<EspecialidadResponseDTO> updateEspecialidad(@PathVariable long id, @RequestBody EspecialidadRequestDTO dto)
+    public ResponseEntity<EspecialidadResponseDTO> updateEspecialidad(@PathVariable Long id, @RequestBody EspecialidadRequestDTO dto)
     {
         return new ResponseEntity<>(service.updateEspecialidad(id, dto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<EspecialidadResponseDTO> deleteEspecialidad(@PathVariable long id)
+    public ResponseEntity<EspecialidadResponseDTO> deleteEspecialidad(@PathVariable Long id)
     {
         return new ResponseEntity<>(service.deleteEspecialiad(id), HttpStatus.OK);
     }

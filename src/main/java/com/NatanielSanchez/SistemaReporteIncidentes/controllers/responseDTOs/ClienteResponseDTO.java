@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 public class ClienteResponseDTO
 {
     long id;
-    String tipo_cliente;
+    String tipoCliente;
     String nombre;
     String email;
     String identificacion;
-    long[] id_servicios;
+    long[] idServicios;
 }

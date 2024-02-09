@@ -29,7 +29,7 @@ public class IncidenteController
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<IncidenteResponseDTO> getById(@RequestParam long id)
+    public ResponseEntity<IncidenteResponseDTO> getById(@RequestParam Long id)
     {
         return new ResponseEntity<>(service.getById(id), HttpStatus.OK);
     }

@@ -1,5 +1,6 @@
 package com.NatanielSanchez.SistemaReporteIncidentes.models;
 
+import com.NatanielSanchez.SistemaReporteIncidentes.exceptions.InvalidRequestParameterException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +20,8 @@ public class Incidente implements Serializable
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_incidente;
+    @Column(name = "id_incidente")
+    private long idIncidente;
 
     @ManyToOne
     @JoinColumn(name = "id_cliente", nullable = false)
@@ -37,21 +39,21 @@ public class Incidente implements Serializable
     @OneToMany(mappedBy = "incidente", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetalleProblema> problemas = new ArrayList<>();;
 
-    @Column
-    private LocalDateTime fecha_inicio;
+    @Column(name = "fecha_inicio")
+    private LocalDateTime fechaInicio;
     @Column
     private boolean resuelto;
-    @Column
-    private LocalDateTime fecha_resolucion;
+    @Column(name = "fecha_resolucion")
+    private LocalDateTime fechaResolucion;
     @Column
     private String mensaje;
 
-    public Incidente(Cliente cliente, Servicio servicio, Tecnico tecnico, LocalDateTime fecha_inicio)
+    public Incidente(Cliente cliente, Servicio servicio, Tecnico tecnico, LocalDateTime fechaInicio)
     {
         this.cliente = cliente;
         this.servicio = servicio;
         this.tecnico = tecnico;
-        this.fecha_inicio = fecha_inicio;
+        this.fechaInicio = fechaInicio;
         this.resuelto = false;
         this.problemas = new ArrayList<>();
     }
@@ -63,10 +65,12 @@ public class Incidente implements Serializable
 
     public void resolver(String mensaje)
     {
-        if (resuelto) return;
+        if (resuelto)
+            throw new InvalidRequestParameterException("El incidente con ID: " + idIncidente
+                + " ya ha sido resuelto en fecha: " + fechaResolucion);
 
         resuelto = true;
-        fecha_resolucion = LocalDateTime.now();
+        fechaResolucion = LocalDateTime.now();
         this.mensaje = mensaje;
     }
 }

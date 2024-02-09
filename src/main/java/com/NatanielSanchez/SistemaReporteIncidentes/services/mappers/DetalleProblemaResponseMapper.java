@@ -2,7 +2,6 @@ package com.NatanielSanchez.SistemaReporteIncidentes.services.mappers;
 
 import com.NatanielSanchez.SistemaReporteIncidentes.controllers.responseDTOs.DetalleProblemaResponseDTO;
 import com.NatanielSanchez.SistemaReporteIncidentes.models.DetalleProblema;
-import com.NatanielSanchez.SistemaReporteIncidentes.models.TiempoEstimadoResolucion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +24,7 @@ public class DetalleProblemaResponseMapper implements Function<DetalleProblema, 
 
         for(int i=0; i< detalleProblema.getEstimaciones().size(); i++)
         {
-            estimaciones[i] = detalleProblema.getEstimaciones().get(i).getTiempo_estimado_resolucion();
+            estimaciones[i] = detalleProblema.getEstimaciones().get(i).getTiempoEstimadoResolucion();
         }
 
         return new DetalleProblemaResponseDTO(mapper.apply(detalleProblema.getProblema()),

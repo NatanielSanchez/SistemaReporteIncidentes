@@ -16,8 +16,8 @@ public class Especialidad
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private long id_especialidad;
+    @Column(name = "id_especialidad")
+    private long idEspecialidad;
 
     @Column
     private String nombre;

@@ -15,12 +15,13 @@ public class TiempoEstimadoResolucion implements Serializable
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_estimacion;
+    @Column(name = "id_estimacion")
+    private Long idEstimacion;
 
-    @Column
-    private int tiempo_estimado_resolucion;
+    @Column(name = "tiempo_estimado_resolucion")
+    private Long tiempoEstimadoResolucion;
 
-    public TiempoEstimadoResolucion(int tiempo_estimado_resolucion) {
-        this.tiempo_estimado_resolucion = tiempo_estimado_resolucion;
+    public TiempoEstimadoResolucion(Long tiempoEstimadoResolucion) {
+        this.tiempoEstimadoResolucion = tiempoEstimadoResolucion;
     }
 }

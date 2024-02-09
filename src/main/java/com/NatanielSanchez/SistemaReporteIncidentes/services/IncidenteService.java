@@ -9,11 +9,9 @@ import com.NatanielSanchez.SistemaReporteIncidentes.models.*;
 import com.NatanielSanchez.SistemaReporteIncidentes.repositories.*;
 import com.NatanielSanchez.SistemaReporteIncidentes.services.mappers.IncidenteResponseMapper;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -46,7 +44,7 @@ public class IncidenteService
                 .toList();
     }
 
-    public IncidenteResponseDTO getById(long id)
+    public IncidenteResponseDTO getById(Long id)
     {
         Incidente incidente = incidenteRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("INCIDENTE ID: " + id));
@@ -58,21 +56,21 @@ public class IncidenteService
     public IncidenteResponseDTO addIncidente(IncidenteRequestDTO dto)
     {
         //BUSCO AL CLIENTE
-        Cliente cliente = clienteRepository.findById(dto.getId_cliente())
-                .orElseThrow(() -> new ResourceNotFoundException("CLIENTE ID: " + dto.getId_cliente()));
+        Cliente cliente = clienteRepository.findById(dto.getIdCliente())
+                .orElseThrow(() -> new ResourceNotFoundException("CLIENTE ID: " + dto.getIdCliente()));
 
         //BUSCO EL SEVICIO
-        Servicio servicio = servicioRepository.findById(dto.getId_servicio())
-                .orElseThrow(() -> new ResourceNotFoundException("SERVICIO ID: " + dto.getId_servicio()));
+        Servicio servicio = servicioRepository.findById(dto.getIdServicio())
+                .orElseThrow(() -> new ResourceNotFoundException("SERVICIO ID: " + dto.getIdServicio()));
 
         //VERFICO QUE EL CLIENTE ESTE SUBSCRIPTO AL SERVICIO
         if(!cliente.esTuServicio(servicio))
-            throw new InvalidRequestParameterException("El cliente con ID: " + cliente.getId_cliente()
-                    + " no está subscripto al servicio ID: " + servicio.getId_servicio());
+            throw new InvalidRequestParameterException("El cliente con ID: " + cliente.getIdCliente()
+                    + " no está subscripto al servicio ID: " + servicio.getIdServicio());
 
         //BUSCO AL TECNICO
-        Tecnico tecnico = tecnicoRepository.findById(dto.getId_tecnico())
-                .orElseThrow(() -> new ResourceNotFoundException("TECNICO ID: " + dto.getId_tecnico()));
+        Tecnico tecnico = tecnicoRepository.findById(dto.getIdTecnico())
+                .orElseThrow(() -> new ResourceNotFoundException("TECNICO ID: " + dto.getIdTecnico()));
 
         //INICIALIZO EL INCIDENTE
         Incidente incidente = new Incidente(cliente, servicio, tecnico, LocalDateTime.now());
@@ -80,29 +78,27 @@ public class IncidenteService
         //BUSCO Y VERIFICO LOS PROBLEMAS DEL INCIDENTE
         for(DetalleProblemaRequestDTO dp_dto : dto.getProblemas())
         {
-            Problema p = problemaRepository.findById(dp_dto.getId_problema())
-                    .orElseThrow(() -> new ResourceNotFoundException("PROBLEMA ID: " + dp_dto.getId_problema()));
+            Problema p = problemaRepository.findById(dp_dto.getIdProblema())
+                    .orElseThrow(() -> new ResourceNotFoundException("PROBLEMA ID: " + dp_dto.getIdProblema()));
 
             //Si el problema no corresponde al servicio, o no puede ser resuelto por el tecnico, TIRA EXCEPCION
             if( !servicio.esTuProblema(p))
             {
-                throw new InvalidRequestParameterException("El problema con ID: " + p.getId_problema()
-                        + " no corresponde al servicio con ID: " + servicio.getId_servicio());
+                throw new InvalidRequestParameterException("El problema con ID: " + p.getIdProblema()
+                        + " no corresponde al servicio con ID: " + servicio.getIdServicio());
             }
 
             if( !tecnico.puedeResolverProblema(p) )
             {
-                throw new InvalidRequestParameterException("El tecnico con ID: " + tecnico.getId_tecnico()
-                        + " no puede resolver el problema con ID: " + p.getId_problema());
+                throw new InvalidRequestParameterException("El tecnico con ID: " + tecnico.getIdTecnico()
+                        + " no puede resolver el problema con ID: " + p.getIdProblema());
             }
 
             // PREPARO LAS ESTIMACIONES DE RESOLUCION DEL PROBLEMA
-            ArrayList<TiempoEstimadoResolucion> estimaciones = new ArrayList<>();
-            for(int i=0; i < dp_dto.getEstimaciones().length; i++)
-            {
-                TiempoEstimadoResolucion estimacion = new TiempoEstimadoResolucion(dp_dto.getEstimaciones()[i]);
-                estimaciones.add(estimacion);
-            }
+            List<TiempoEstimadoResolucion> estimaciones = dp_dto.getEstimaciones().stream()
+                    .map(TiempoEstimadoResolucion::new)
+                    .toList();
+
             //CREACION DEL DETALLE_PROBLEMA (delegado al incidente)
             incidente.crearDetalleProblema(p, estimaciones);
         }
@@ -115,10 +111,6 @@ public class IncidenteService
     {
         Incidente incidente = incidenteRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("INCIDENTE ID: " + id));
-
-        if(incidente.isResuelto())
-            throw new InvalidRequestParameterException("El incidente con ID: " + incidente.getId_incidente()
-                    + " ya ha sido resuelto en fecha: " + incidente.getFecha_resolucion());
 
         incidente.resolver(mensaje);
         incidenteRepository.save(incidente);

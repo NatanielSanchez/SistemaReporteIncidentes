@@ -13,11 +13,11 @@ public class ProblemaResponseMapper implements Function<Problema, ProblemaRespon
     public ProblemaResponseDTO apply(Problema problema)
     {
         return new ProblemaResponseDTO(
-                problema.getId_problema(),
+                problema.getIdProblema(),
                 problema.getTipo(),
                 problema.getDescripcion(),
                 //devuelve los minutos a tiempo en formato HH:MM:SS
-                formatTime(problema.getTiempo_maximo_resolucion()),
+                formatTime(problema.getTiempoMaximoResolucion()),
                 problema.isComplejo());
     }
 

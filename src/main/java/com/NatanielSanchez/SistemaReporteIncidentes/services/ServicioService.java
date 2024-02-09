@@ -33,7 +33,7 @@ public class ServicioService
                 .toList();
     }
 
-    public ServicioResponseDTO getServicioById(long id) throws ResourceNotFoundException
+    public ServicioResponseDTO getServicioById(Long id) throws ResourceNotFoundException
     {
         Servicio servicio = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Servicio ID: " + id));
@@ -51,7 +51,7 @@ public class ServicioService
         {
             servicio.crearProblema(dto.getTipo(),
                     dto.getDescripcion(),
-                    dto.getTiempo_maximo_resolucion(),
+                    dto.getTiempoMaximoResolucion(),
                     dto.isComplejo());
         }
 
@@ -59,7 +59,7 @@ public class ServicioService
         return mapper.apply(servicio);
     }
 
-    public ServicioResponseDTO updateServicio(long id, ServicioUpdateRequestDTO dto)
+    public ServicioResponseDTO updateServicio(Long id, ServicioUpdateRequestDTO dto)
     {
         Servicio servicio = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Servicio ID: " + id));
@@ -77,7 +77,7 @@ public class ServicioService
         return mapper.apply(servicio);
     }
 
-    public ServicioResponseDTO deleteServicio(long id)
+    public ServicioResponseDTO deleteServicio(Long id)
     {
         Servicio servicio = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Servicio ID: " + id));

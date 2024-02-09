@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ServicioResponseDTO
 {
-    long id_servicio;
+    long idServicio;
     String nombre;
     List<ProblemaResponseDTO> problemas;
 }

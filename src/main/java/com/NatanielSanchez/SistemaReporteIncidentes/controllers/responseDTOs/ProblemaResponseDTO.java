@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProblemaResponseDTO
 {
-    long id_problema;
+    long idProblema;
     String tipo;
     String descripcion;
-    String tiempo_maximo_resolucion;
+    String tiempoMaximoResolucion;
     boolean complejo;
 }

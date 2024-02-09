@@ -21,9 +21,9 @@ public class TecnicoResponseMapper implements Function<Tecnico, TecnicoResponseD
     @Override
     public TecnicoResponseDTO apply(Tecnico tecnico)
     {
-        return new TecnicoResponseDTO(tecnico.getId_tecnico(),
+        return new TecnicoResponseDTO(tecnico.getIdTecnico(),
                 tecnico.getNombre(),
-                tecnico.getTipo_notificacion().getTipo(),
+                tecnico.getTipoNotificacion().getTipo(),
                 tecnico.getContacto(),
                 tecnico.getEspecialidades().stream().map(especialidadResponseMapper).toList());
     }

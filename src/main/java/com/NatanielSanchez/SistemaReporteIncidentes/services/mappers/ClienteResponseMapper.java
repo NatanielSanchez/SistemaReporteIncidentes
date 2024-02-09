@@ -13,11 +13,11 @@ public class ClienteResponseMapper implements Function<Cliente, ClienteResponseD
     @Override
     public ClienteResponseDTO apply(Cliente cliente)
     {
-        return new ClienteResponseDTO(cliente.getId_cliente(),
-                cliente.getTipo_cliente().getTipo(),
+        return new ClienteResponseDTO(cliente.getIdCliente(),
+                cliente.getTipoCliente().getTipo(),
                 cliente.getNombre(),
                 cliente.getEmail(),
                 cliente.getIdentificacion(),
-                cliente.getServicios().stream().mapToLong(Servicio::getId_servicio).toArray());
+                cliente.getServicios().stream().mapToLong(Servicio::getIdServicio).toArray());
     }
 }

@@ -28,6 +28,6 @@ public class ServicioResponseMapper implements Function<Servicio, ServicioRespon
                         .map(problemaResponseMapper)
                         .toList();
 
-        return new ServicioResponseDTO(servicio.getId_servicio(), servicio.getNombre(), lista);
+        return new ServicioResponseDTO(servicio.getIdServicio(), servicio.getNombre(), lista);
     }
 }

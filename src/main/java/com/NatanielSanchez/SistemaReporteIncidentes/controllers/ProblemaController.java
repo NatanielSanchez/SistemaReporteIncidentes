@@ -29,7 +29,7 @@ public class ProblemaController
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProblemaResponseDTO> getProblemaById(@PathVariable long id)
+    public ResponseEntity<ProblemaResponseDTO> getProblemaById(@PathVariable Long id)
     {
         return new ResponseEntity<>(service.getProblemaById(id), HttpStatus.OK);
     }
@@ -41,13 +41,13 @@ public class ProblemaController
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProblemaResponseDTO> updateProblema(@PathVariable long id, @RequestBody ProblemaUpdateRequestDTO dto)
+    public ResponseEntity<ProblemaResponseDTO> updateProblema(@PathVariable Long id, @RequestBody ProblemaUpdateRequestDTO dto)
     {
         return new ResponseEntity<>(service.updateProblema(id, dto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ProblemaResponseDTO> deleteProblema(@PathVariable long id)
+    public ResponseEntity<ProblemaResponseDTO> deleteProblema(@PathVariable Long id)
     {
         return new ResponseEntity<>(service.deleteProblema(id), HttpStatus.OK);
     }

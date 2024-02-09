@@ -6,7 +6,6 @@ import com.NatanielSanchez.SistemaReporteIncidentes.models.Incidente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -28,18 +27,18 @@ public class IncidenteResponseMapper implements Function<Incidente, IncidenteRes
                 .toList();
 
         String fecha_resolucion;
-        if (incidente.isResuelto()) fecha_resolucion = incidente.getFecha_resolucion().toString();
+        if (incidente.isResuelto()) fecha_resolucion = incidente.getFechaResolucion().toString();
         else fecha_resolucion = "------";
 
         String mensaje = incidente.getMensaje();
         if ( mensaje == null || mensaje.isEmpty() ) mensaje = "------";
 
-        return new IncidenteResponseDTO(incidente.getId_incidente(),
-                incidente.getCliente().getId_cliente(),
-                incidente.getServicio().getId_servicio(),
-                incidente.getTecnico().getId_tecnico(),
+        return new IncidenteResponseDTO(incidente.getIdIncidente(),
+                incidente.getCliente().getIdCliente(),
+                incidente.getServicio().getIdServicio(),
+                incidente.getTecnico().getIdTecnico(),
                 lista,
-                incidente.getFecha_inicio().toString(),
+                incidente.getFechaInicio().toString(),
                 incidente.isResuelto(),
                 fecha_resolucion,
                 mensaje);

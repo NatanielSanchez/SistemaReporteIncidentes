@@ -17,9 +17,9 @@ import java.util.List;
 public class Servicio implements Serializable
 {
     @Id
-    @Column(nullable = false)
+    @Column(name = "id_servicio", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id_servicio;
+    private long idServicio;
 
     @Column(nullable = false)
     private String nombre;
