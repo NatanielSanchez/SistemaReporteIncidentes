@@ -5,11 +5,11 @@ import com.NatanielSanchez.SistemaReporteIncidentes.controllers.responseDTOs.Tec
 import com.NatanielSanchez.SistemaReporteIncidentes.exceptions.ResourceNotFoundException;
 import com.NatanielSanchez.SistemaReporteIncidentes.models.Especialidad;
 import com.NatanielSanchez.SistemaReporteIncidentes.models.Tecnico;
-import com.NatanielSanchez.SistemaReporteIncidentes.models.TipoNotificacion;
 import com.NatanielSanchez.SistemaReporteIncidentes.repositories.EspecialidadRepository;
 import com.NatanielSanchez.SistemaReporteIncidentes.repositories.TecnicoRepository;
-import com.NatanielSanchez.SistemaReporteIncidentes.repositories.TipoNotificacionRepository;
 import com.NatanielSanchez.SistemaReporteIncidentes.services.mappers.TecnicoResponseMapper;
+import com.NatanielSanchez.SistemaReporteIncidentes.util.ContactoFactory;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,23 +19,23 @@ import java.util.List;
 public class TecnicoService
 {
     TecnicoRepository tecnicoRepository;
-    TipoNotificacionRepository tipoNotificacionRepository;
     EspecialidadRepository especialidadRepository;
-    TecnicoResponseMapper mapper;
+    TecnicoResponseMapper tecnicoResponseMapper;
+    ContactoFactory contactoFactory;
 
     @Autowired
-    public TecnicoService(TecnicoRepository tecnicoRepository, TipoNotificacionRepository tipoNotificacionRepository, EspecialidadRepository especialidadRepository, TecnicoResponseMapper mapper)
+    public TecnicoService(TecnicoRepository tecnicoRepository, EspecialidadRepository especialidadRepository, TecnicoResponseMapper tecnicoResponseMapper, ContactoFactory contactoFactory)
     {
         this.tecnicoRepository = tecnicoRepository;
-        this.tipoNotificacionRepository = tipoNotificacionRepository;
         this.especialidadRepository = especialidadRepository;
-        this.mapper = mapper;
+        this.tecnicoResponseMapper = tecnicoResponseMapper;
+        this.contactoFactory = contactoFactory;
     }
 
     public List<TecnicoResponseDTO> getAllTecnicos()
     {
         return tecnicoRepository.findAll().stream()
-                .map(mapper)
+                .map(tecnicoResponseMapper)
                 .toList();
     }
 
@@ -43,13 +43,12 @@ public class TecnicoService
     {
         Tecnico tecnico = tecnicoRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("TECNICO ID: " + id));
-        return mapper.apply(tecnico);
+        return tecnicoResponseMapper.apply(tecnico);
     }
 
+    @Transactional
     public TecnicoResponseDTO addTecnico(TecnicoRequestDTO dto)
     {
-        TipoNotificacion tipoNotificacion = tipoNotificacionRepository.findByTipo(dto.getTipoNotificacion().toUpperCase())
-                .orElseThrow(()-> new ResourceNotFoundException("TIPO NOTIFICACION: " + dto.getTipoNotificacion().toUpperCase()));
 
         List<Especialidad> especialidades = dto.getIdEspecialidades().stream()
                 .map(id -> especialidadRepository.findById(id)
@@ -57,12 +56,12 @@ public class TecnicoService
                 .toList();
 
         Tecnico tecnico = new Tecnico(dto.getNombre().toUpperCase(),
-                tipoNotificacion,
-                dto.getContacto().toUpperCase(),
+                dto.getApellido().toUpperCase(),
+                dto.getContactos().stream().map(contactoFactory).toList(),
                 especialidades);
 
         tecnicoRepository.save(tecnico);
-        return mapper.apply(tecnico);
+        return tecnicoResponseMapper.apply(tecnico);
     }
 
 
@@ -71,20 +70,18 @@ public class TecnicoService
         Tecnico tecnico = tecnicoRepository.findById(id_tecnico)
                 .orElseThrow(()-> new ResourceNotFoundException("TECNICO ID: " + id_tecnico));
 
-        TipoNotificacion tipoNotificacion = tipoNotificacionRepository.findByTipo(dto.getTipoNotificacion().toUpperCase())
-                .orElseThrow(()-> new ResourceNotFoundException("TIPO NOTIFICACION: " + dto.getTipoNotificacion().toUpperCase()));
-
         List<Especialidad> especialidades = dto.getIdEspecialidades().stream()
                 .map(id -> especialidadRepository.findById(id)
                         .orElseThrow(()-> new ResourceNotFoundException("ESPECIALIDAD ID: " + id)))
                 .toList();
 
         tecnico.update(dto.getNombre().toUpperCase(),
-                tipoNotificacion,
-                dto.getContacto().toUpperCase(),
+                dto.getApellido().toUpperCase(),
+                dto.getContactos().stream().map(contactoFactory).toList(),
                 especialidades);
+
         tecnicoRepository.save(tecnico);
-        return mapper.apply(tecnico);
+        return tecnicoResponseMapper.apply(tecnico);
     }
 
     public TecnicoResponseDTO deleteTecnico(Long id)
@@ -93,6 +90,6 @@ public class TecnicoService
                 .orElseThrow(()-> new ResourceNotFoundException("TECNICO ID: " + id));
 
         tecnicoRepository.delete(tecnico);
-        return mapper.apply(tecnico);
+        return tecnicoResponseMapper.apply(tecnico);
     }
 }

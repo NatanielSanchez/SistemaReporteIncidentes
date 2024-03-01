@@ -11,11 +11,13 @@ import java.util.function.Function;
 public class TecnicoResponseMapper implements Function<Tecnico, TecnicoResponseDTO>
 {
     private EspecialidadResponseMapper especialidadResponseMapper;
+    private ContactoResponseMapper contactoResponseMapper;
 
     @Autowired
-    public TecnicoResponseMapper(EspecialidadResponseMapper especialidadResponseMapper)
+    public TecnicoResponseMapper(EspecialidadResponseMapper especialidadResponseMapper, ContactoResponseMapper contactoResponseMapper)
     {
         this.especialidadResponseMapper = especialidadResponseMapper;
+        this.contactoResponseMapper = contactoResponseMapper;
     }
 
     @Override
@@ -23,8 +25,8 @@ public class TecnicoResponseMapper implements Function<Tecnico, TecnicoResponseD
     {
         return new TecnicoResponseDTO(tecnico.getIdTecnico(),
                 tecnico.getNombre(),
-                tecnico.getTipoNotificacion().getTipo(),
-                tecnico.getContacto(),
+                tecnico.getApellido(),
+                tecnico.getContactos().stream().map(contactoResponseMapper).toList(),
                 tecnico.getEspecialidades().stream().map(especialidadResponseMapper).toList());
     }
 }

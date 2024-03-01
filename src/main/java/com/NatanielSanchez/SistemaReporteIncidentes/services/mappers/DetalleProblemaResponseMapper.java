@@ -10,11 +10,11 @@ import java.util.function.Function;
 @Service
 public class DetalleProblemaResponseMapper implements Function<DetalleProblema, DetalleProblemaResponseDTO>
 {
-    private ProblemaResponseMapper mapper;
+    private ProblemaResponseMapper problemaResponseMapper;
     @Autowired
-    public DetalleProblemaResponseMapper(ProblemaResponseMapper mapper)
+    public DetalleProblemaResponseMapper(ProblemaResponseMapper problemaResponseMapper)
     {
-        this.mapper = mapper;
+        this.problemaResponseMapper = problemaResponseMapper;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class DetalleProblemaResponseMapper implements Function<DetalleProblema, 
             estimaciones[i] = detalleProblema.getEstimaciones().get(i).getTiempoEstimadoResolucion();
         }
 
-        return new DetalleProblemaResponseDTO(mapper.apply(detalleProblema.getProblema()),
+        return new DetalleProblemaResponseDTO(problemaResponseMapper.apply(detalleProblema.getProblema()),
                 estimaciones);
     }
 }

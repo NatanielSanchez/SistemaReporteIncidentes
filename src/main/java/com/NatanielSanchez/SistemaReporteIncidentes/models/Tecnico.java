@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,49 +19,48 @@ public class Tecnico implements Serializable
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_tecnico")
-    private long idTecnico;
+    private Long idTecnico;
 
     @Column
     private String nombre;
-
-    @ManyToOne
-    @JoinColumn(name = "id_tipo_notificacion")
-    private TipoNotificacion tipoNotificacion;
-
     @Column
-    private String contacto;
+    private String apellido;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_tecnico")
+    private List<Contacto> contactos = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "tecnico_x_especialidad",
             joinColumns = @JoinColumn(name = "id_tecnico"),
             inverseJoinColumns = @JoinColumn(name = "id_especialidad")
     )
-    private List<Especialidad> especialidades;
+    private List<Especialidad> especialidades = new ArrayList<>();
 
-    public Tecnico(String nombre, TipoNotificacion tipoNotificacion, String contacto, List<Especialidad> especialidades)
+    public Tecnico(String nombre, String apellido, List<Contacto> contactos, List<Especialidad> especialidades)
     {
         this.nombre = nombre;
-        this.tipoNotificacion = tipoNotificacion;
-        this.contacto = contacto;
+        this.apellido = apellido;
+        this.contactos = contactos;
         this.especialidades = especialidades;
     }
 
-    public void update(String nombre, TipoNotificacion tipoNotificacion, String contacto, List<Especialidad> especialidades)
+    public void update(String nombre, String apellido, List<Contacto> contactos, List<Especialidad> especialidades)
     {
         this.nombre = nombre;
-        this.tipoNotificacion = tipoNotificacion;
-        this.contacto = contacto;
-        this.especialidades = especialidades;
+        this.apellido = apellido;
+        setContactos(contactos);
+        setEspecialidades(especialidades);
     }
 
     //Verifica si puede resolver un problema particular
     public boolean puedeResolverProblema(Problema p)
     {
-        return especialidades.stream().anyMatch((e) -> e.esTuProblema(p));
+        return getEspecialidades().stream().anyMatch((e) -> e.esTuProblema(p));
     }
 
-    // Verifica si puede resolverun conjunto de problemas
+    // Verifica si puede resolver un conjunto de problemas
     public boolean puedeResolverProblemas(List<Problema> problemas)
     {
         return problemas.stream().allMatch(this::puedeResolverProblema);

@@ -13,6 +13,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class DetalleProblemaEmbeddedId implements Serializable
 {
-    private long idIncidente;
-    private long idProblema;
+    private Long idIncidente;
+    private Long idProblema;
 }

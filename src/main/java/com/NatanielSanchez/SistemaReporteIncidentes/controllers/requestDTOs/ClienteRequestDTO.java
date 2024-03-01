@@ -17,9 +17,9 @@ public class ClienteRequestDTO
     @NotEmpty
     String nombre;
     @NotEmpty
-    String email;
-    @NotEmpty
     String identificacion;
+    @NotEmpty
+    List<ContactoRequestDTO> contactos;
 
     List<Long> idServicios;
 }

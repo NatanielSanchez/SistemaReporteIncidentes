@@ -17,7 +17,7 @@ public class Problema implements Serializable
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_problema")
-    private long idProblema;
+    private Long idProblema;
 
     @Column
     private String tipo;

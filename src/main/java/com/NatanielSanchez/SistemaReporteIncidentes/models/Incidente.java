@@ -21,22 +21,22 @@ public class Incidente implements Serializable
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_incidente")
-    private long idIncidente;
+    private Long idIncidente;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cliente", nullable = false)
     private Cliente cliente;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_servicio", nullable = false)
     private Servicio servicio;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_tecnico", nullable = false)
     private Tecnico tecnico;
 
     // LISTA DE "DetalleProblema" !!!
-    @OneToMany(mappedBy = "incidente", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "incidente", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetalleProblema> problemas = new ArrayList<>();;
 
     @Column(name = "fecha_inicio")
@@ -60,7 +60,7 @@ public class Incidente implements Serializable
 
     public void crearDetalleProblema(Problema p, List<TiempoEstimadoResolucion> estimaciones)
     {
-        problemas.add(new DetalleProblema(this, p, estimaciones));
+        getProblemas().add(new DetalleProblema(this, p, estimaciones));
     }
 
     public void resolver(String mensaje)

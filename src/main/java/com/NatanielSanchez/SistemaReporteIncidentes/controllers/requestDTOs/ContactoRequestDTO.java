@@ -5,19 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TecnicoRequestDTO
+public class ContactoRequestDTO
 {
     @NotEmpty
-    private String nombre;
+    String tipoContacto;
     @NotEmpty
-    private String apellido;
-    @NotEmpty
-    private List<ContactoRequestDTO> contactos;
-    @NotEmpty
-    private List<Long> idEspecialidades;
+    String contacto;
 }

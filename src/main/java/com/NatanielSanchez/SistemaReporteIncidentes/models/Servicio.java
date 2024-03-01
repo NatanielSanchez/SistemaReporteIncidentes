@@ -19,12 +19,12 @@ public class Servicio implements Serializable
     @Id
     @Column(name = "id_servicio", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idServicio;
+    private Long idServicio;
 
     @Column(nullable = false)
     private String nombre;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_servicio", nullable = false)
     private List<Problema> problemas = new ArrayList<>();
 
@@ -41,11 +41,11 @@ public class Servicio implements Serializable
 
     public boolean esTuProblema(Problema p)
     {
-        return problemas.contains(p);
+        return getProblemas().contains(p);
     }
 
     public void crearProblema(String tipo, String descripcion, long tiempoMaximoResolucion, boolean complejo)
     {
-        problemas.add(new Problema(tipo, descripcion, tiempoMaximoResolucion, complejo));
+        getProblemas().add(new Problema(tipo, descripcion, tiempoMaximoResolucion, complejo));
     }
 }

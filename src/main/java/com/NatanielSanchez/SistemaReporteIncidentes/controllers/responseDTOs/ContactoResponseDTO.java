@@ -4,17 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClienteResponseDTO
+public class ContactoResponseDTO
 {
-    long id;
-    String tipoCliente;
-    String nombre;
-    String identificacion;
-    List<ContactoResponseDTO> contactos;
-    long[] idServicios;
+    String tipoContacto;
+    String contacto;
 }

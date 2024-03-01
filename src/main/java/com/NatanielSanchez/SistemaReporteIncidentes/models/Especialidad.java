@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,18 +18,18 @@ public class Especialidad
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_especialidad")
-    private long idEspecialidad;
+    private Long idEspecialidad;
 
     @Column
     private String nombre;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "especialidad_x_problema",
             joinColumns = @JoinColumn(name = "id_especialidad"),
             inverseJoinColumns = @JoinColumn(name = "id_problema")
     )
-    private List<Problema> problemas;
+    private List<Problema> problemas = new ArrayList<>();
 
     public Especialidad(String nombre, List<Problema> problemas)
     {
@@ -39,10 +40,10 @@ public class Especialidad
     public void update(String nombre, List<Problema> problemas)
     {
         this.nombre = nombre;
-        this.problemas = problemas;
+        setProblemas(problemas);
     }
 
     public boolean esTuProblema(Problema p) {
-        return this.problemas.contains(p);
+        return getProblemas().contains(p);
     }
 }

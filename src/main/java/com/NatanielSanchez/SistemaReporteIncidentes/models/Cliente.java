@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,46 +19,54 @@ public class Cliente implements Serializable
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_cliente", nullable = false)
-    private long idCliente;
+    private Long idCliente;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_tipo_cliente")
     private TipoCliente tipoCliente;
 
     @Column
     private String nombre;
     @Column
-    private String email;
-    @Column
     private String identificacion;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_cliente")
+    private List<Contacto> contactos = new ArrayList<>();
+
+
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "servicio_x_cliente",
             joinColumns = @JoinColumn(name = "id_cliente"),
             inverseJoinColumns = @JoinColumn(name = "id_servicio")
     )
-    private List<Servicio> servicios;
+    private List<Servicio> servicios = new ArrayList<>();
 
-    public Cliente(TipoCliente tipoCliente, String nombre, String email, String identificacion, List<Servicio> servicios)
+    public Cliente(TipoCliente tipoCliente, String nombre, String identificacion, List<Contacto> contactos, List<Servicio> servicios)
     {
         this.tipoCliente = tipoCliente;
         this.nombre = nombre;
-        this.email = email;
         this.identificacion = identificacion;
+        this.contactos = contactos;
         this.servicios = servicios;
     }
 
-    public void update(TipoCliente tipoCliente, String nombre, String email, String identificacion, List<Servicio> servicios)
+    public void update(TipoCliente tipoCliente, String nombre, String identificacion, List<Contacto> contactos, List<Servicio> servicios)
     {
-        this.tipoCliente = tipoCliente;
+        setTipoCliente(tipoCliente);
         this.nombre = nombre;
-        this.email = email;
+        setContactos(contactos);
         this.identificacion = identificacion;
-        this.servicios = servicios;
+        setServicios(servicios);
+    }
+
+    public boolean addContacto(Contacto contacto)
+    {
+        return getContactos().add(contacto);
     }
 
     public boolean esTuServicio(Servicio servicio) {
-        return this.servicios.contains(servicio);
+        return getServicios().contains(servicio);
     }
 }

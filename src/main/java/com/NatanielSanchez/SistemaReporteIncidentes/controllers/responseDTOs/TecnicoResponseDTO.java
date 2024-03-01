@@ -13,7 +13,7 @@ public class TecnicoResponseDTO
 {
     private long idTecnico;
     private String nombre;
-    private String tipoNotificacion;
-    private String contacto;
+    private String apellido;
+    private List<ContactoResponseDTO> contactos;
     private List<EspecialidadResponseDTO> especialdades;
 }
