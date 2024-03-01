@@ -15,5 +15,5 @@ public class TecnicoResponseDTO
     private String nombre;
     private String apellido;
     private List<ContactoResponseDTO> contactos;
-    private List<EspecialidadResponseDTO> especialdades;
+    private List<EspecialidadResponseDTO> especialidades;
 }
