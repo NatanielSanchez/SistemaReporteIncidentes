@@ -37,7 +37,7 @@ public class Incidente implements Serializable
 
     // LISTA DE "DetalleProblema" !!!
     @OneToMany(mappedBy = "incidente", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DetalleProblema> problemas = new ArrayList<>();;
+    private List<DetalleProblema> problemas = new ArrayList<>();
 
     @Column(name = "fecha_inicio")
     private LocalDateTime fechaInicio;

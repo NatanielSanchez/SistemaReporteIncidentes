@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "clientes")
@@ -32,7 +34,7 @@ public class Cliente implements Serializable
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cliente")
-    private List<Contacto> contactos = new ArrayList<>();
+    private Set<Contacto> contactos = new HashSet<>();
 
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -43,7 +45,7 @@ public class Cliente implements Serializable
     )
     private List<Servicio> servicios = new ArrayList<>();
 
-    public Cliente(TipoCliente tipoCliente, String nombre, String identificacion, List<Contacto> contactos, List<Servicio> servicios)
+    public Cliente(TipoCliente tipoCliente, String nombre, String identificacion, Set<Contacto> contactos, List<Servicio> servicios)
     {
         this.tipoCliente = tipoCliente;
         this.nombre = nombre;
@@ -52,7 +54,7 @@ public class Cliente implements Serializable
         this.servicios = servicios;
     }
 
-    public void update(TipoCliente tipoCliente, String nombre, String identificacion, List<Contacto> contactos, List<Servicio> servicios)
+    public void update(TipoCliente tipoCliente, String nombre, String identificacion, Set<Contacto> contactos, List<Servicio> servicios)
     {
         setTipoCliente(tipoCliente);
         this.nombre = nombre;

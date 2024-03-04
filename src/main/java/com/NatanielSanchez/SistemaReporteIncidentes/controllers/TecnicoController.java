@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/tecnicos")
@@ -47,4 +48,13 @@ public class TecnicoController
         return new ResponseEntity<>(service.deleteTecnico(id), HttpStatus.OK);
     }
 
+    @GetMapping("/filtros")
+    public ResponseEntity<List<TecnicoResponseDTO>>
+        getTecnicosFiltrado(@RequestParam(name = "nombre", required = false) String nombre,
+                            @RequestParam(name = "apellido", required = false) String apellido)
+    {
+        if (nombre != null) nombre = nombre.toUpperCase().strip();
+        if (apellido != null) apellido = apellido.toUpperCase().strip();
+        return new ResponseEntity<>(service.getTecnicosFiltrado(nombre, apellido), HttpStatus.OK);
+    }
 }

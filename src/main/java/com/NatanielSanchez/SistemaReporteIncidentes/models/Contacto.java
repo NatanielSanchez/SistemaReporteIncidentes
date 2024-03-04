@@ -1,37 +1,35 @@
 package com.NatanielSanchez.SistemaReporteIncidentes.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DiscriminatorOptions;
 
 @Entity
 @Table(name = "contactos")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "tipo")
-@DiscriminatorOptions(force = true)
 @Data
-public abstract class Contacto
+@AllArgsConstructor
+@NoArgsConstructor
+public class Contacto
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_contacto")
     @EqualsAndHashCode.Exclude
     protected Long idContacto;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_tipo_contacto")
+    private TipoContacto tipoContacto;
+
     @Column
-    protected String contacto;
+    private String contacto;
 
-    public Contacto()
+    public Contacto(TipoContacto tipoContacto, String contacto)
     {
-    }
-
-    public Contacto(String contacto)
-    {
+        this.tipoContacto = tipoContacto;
         this.contacto = contacto;
     }
-
-    abstract void notificar();
-    public abstract String getTipo();
-    public abstract String getRegex();
-
 }

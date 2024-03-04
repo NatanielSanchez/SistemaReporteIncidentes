@@ -1,22 +1,23 @@
 package com.NatanielSanchez.SistemaReporteIncidentes.services;
 
 import com.NatanielSanchez.SistemaReporteIncidentes.controllers.requestDTOs.ClienteRequestDTO;
+import com.NatanielSanchez.SistemaReporteIncidentes.controllers.requestDTOs.ContactoRequestDTO;
 import com.NatanielSanchez.SistemaReporteIncidentes.controllers.responseDTOs.ClienteResponseDTO;
+import com.NatanielSanchez.SistemaReporteIncidentes.exceptions.InvalidRequestParameterException;
 import com.NatanielSanchez.SistemaReporteIncidentes.exceptions.ResourceNotFoundException;
-import com.NatanielSanchez.SistemaReporteIncidentes.models.Cliente;
-import com.NatanielSanchez.SistemaReporteIncidentes.models.Contacto;
-import com.NatanielSanchez.SistemaReporteIncidentes.models.Servicio;
-import com.NatanielSanchez.SistemaReporteIncidentes.models.TipoCliente;
+import com.NatanielSanchez.SistemaReporteIncidentes.models.*;
 import com.NatanielSanchez.SistemaReporteIncidentes.repositories.ClienteRepository;
 import com.NatanielSanchez.SistemaReporteIncidentes.repositories.ServicioRepository;
 import com.NatanielSanchez.SistemaReporteIncidentes.repositories.TipoClienteRepository;
+import com.NatanielSanchez.SistemaReporteIncidentes.repositories.TipoContactoRepository;
 import com.NatanielSanchez.SistemaReporteIncidentes.services.mappers.ClienteResponseMapper;
-import com.NatanielSanchez.SistemaReporteIncidentes.util.ContactoFactory;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ClienteService
@@ -25,16 +26,16 @@ public class ClienteService
     private TipoClienteRepository tipoClienteRepository;
     private ServicioRepository servicioRepository;
     private ClienteResponseMapper clienteResponseMapper;
-    private ContactoFactory contactoFactory;
+    private TipoContactoRepository tipoContactoRepository;
 
     @Autowired
-    public ClienteService(ClienteRepository clienteRepository, TipoClienteRepository tipoClienteRepository, ServicioRepository servicioRepository, ClienteResponseMapper clienteResponseMapper, ContactoFactory contactoFactory)
+    public ClienteService(ClienteRepository clienteRepository, TipoClienteRepository tipoClienteRepository, ServicioRepository servicioRepository, ClienteResponseMapper clienteResponseMapper, TipoContactoRepository tipoContactoRepository)
     {
         this.clienteRepository = clienteRepository;
         this.tipoClienteRepository = tipoClienteRepository;
         this.servicioRepository = servicioRepository;
         this.clienteResponseMapper = clienteResponseMapper;
-        this.contactoFactory = contactoFactory;
+        this.tipoContactoRepository = tipoContactoRepository;
     }
 
     public List<ClienteResponseDTO> getAllClientes()
@@ -53,15 +54,16 @@ public class ClienteService
     @Transactional
     public ClienteResponseDTO addCliente(ClienteRequestDTO dto)
     {
+        // Busco los servicios, salta exception si no encuentra alguno...
         List<Servicio> servicios = dto.getIdServicios().stream()
                 .map(id-> servicioRepository.findById(id)
                         .orElseThrow(() -> new ResourceNotFoundException("SERVICIO ID: " + id)))
                 .toList();
 
-        // ! Creo una lista de contactos con el ContactoFactory !
-        List<Contacto> contactos = dto.getContactos().stream()
-                .map(contactoFactory)
-                .toList();
+        //Crea los contactos mediante metodo auxiliar crearContacto()
+        Set<Contacto> contactos = dto.getContactos().stream()
+                .map(this::crearContacto)
+                .collect(Collectors.toSet()); // ELIMINA DUPLICADOS DEL STREAM! WOW!
 
         Cliente cliente = new Cliente(findTipoClienteByTipo(dto.getTipoCliente().toUpperCase()),
                 dto.getNombre().toUpperCase(),
@@ -78,15 +80,16 @@ public class ClienteService
         Cliente cliente = clienteRepository.findById(id_cliente)
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente ID: " + id_cliente));
 
+        // Busco los servicios, salta exception si no encuentra alguno...
         List<Servicio> servicios = dto.getIdServicios().stream()
                 .map(id-> servicioRepository.findById(id)
                         .orElseThrow(() -> new ResourceNotFoundException("SERVICIO ID: " + id)))
                 .toList();
 
-        // ! Creo una lista de contactos con el ContactoFactory !
-        List<Contacto> contactos = dto.getContactos().stream()
-                .map(contactoFactory)
-                .toList();
+        //Crea los contactos mediante metodo auxiliar crearContacto()
+        Set<Contacto> contactos = dto.getContactos().stream()
+                .map(this::crearContacto)
+                .collect(Collectors.toSet()); // ELIMINA DUPLICADOS DEL STREAM!
 
         cliente.update(findTipoClienteByTipo(dto.getTipoCliente().toUpperCase()),
                 dto.getNombre().toUpperCase(),
@@ -111,5 +114,17 @@ public class ClienteService
     {
         return tipoClienteRepository.findByTipo(tipo)
                 .orElseThrow(()-> new ResourceNotFoundException("TIPO CLIENTE: " + tipo));
+    }
+
+    private Contacto crearContacto(ContactoRequestDTO dto)
+    {
+        TipoContacto tipoContacto = tipoContactoRepository.findByTipo(dto.getTipoContacto().toUpperCase())
+                .orElseThrow(() -> new ResourceNotFoundException("TIPO CONTACTO: " + dto.getTipoContacto()));
+
+        // Si el contacto no cumple con el regex del TipoContacto, salta exception!
+        if ( ! tipoContacto.verificarContacto(dto.getContacto()))
+            throw new InvalidRequestParameterException(tipoContacto.getMensajeError());
+
+        return new Contacto(tipoContacto, dto.getContacto());
     }
 }

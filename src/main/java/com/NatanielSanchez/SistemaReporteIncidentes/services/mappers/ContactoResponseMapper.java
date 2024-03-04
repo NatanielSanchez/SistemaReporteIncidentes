@@ -13,6 +13,7 @@ public class ContactoResponseMapper implements Function<Contacto, ContactoRespon
     @Override
     public ContactoResponseDTO apply(Contacto contacto)
     {
-        return new ContactoResponseDTO(contacto.getTipo(), contacto.getContacto());
+        return new ContactoResponseDTO(contacto.getTipoContacto().getTipo(),
+                contacto.getContacto());
     }
 }
