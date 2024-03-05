@@ -51,10 +51,9 @@ public class TecnicoController
     @GetMapping("/filtros")
     public ResponseEntity<List<TecnicoResponseDTO>>
         getTecnicosFiltrado(@RequestParam(name = "nombre", required = false) String nombre,
-                            @RequestParam(name = "apellido", required = false) String apellido)
+                            @RequestParam(name = "apellido", required = false) String apellido,
+                            @RequestParam(name = "especialidades", required = false) List<Long> idEspecialidades)
     {
-        if (nombre != null) nombre = nombre.toUpperCase().strip();
-        if (apellido != null) apellido = apellido.toUpperCase().strip();
-        return new ResponseEntity<>(service.getTecnicosFiltrado(nombre, apellido), HttpStatus.OK);
+        return new ResponseEntity<>(service.getTecnicosFiltrado(nombre, apellido, idEspecialidades), HttpStatus.OK);
     }
 }

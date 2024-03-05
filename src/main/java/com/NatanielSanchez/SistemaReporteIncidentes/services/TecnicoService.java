@@ -19,10 +19,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static com.NatanielSanchez.SistemaReporteIncidentes.util.TecnicoSpecs.*;
 
 @Service
 public class TecnicoService
@@ -110,11 +109,18 @@ public class TecnicoService
         return tecnicoResponseMapper.apply(tecnico);
     }
 
-    public List<TecnicoResponseDTO> getTecnicosFiltrado(String nombre, String apellido)
+    public List<TecnicoResponseDTO> getTecnicosFiltrado(String nombre, String apellido, List<Long> idEspecialidades)
     {
         Specification<Tecnico> spec = Specification.where(null);
-        if (nombre != null) spec = spec.or(nombreLike(nombre));
-        if (apellido != null) spec = spec.or(apellidoLike(apellido));
+        if (nombre != null)
+            spec = spec.and(TecnicoRepository.Specs.nombreLike(nombre));
+        if (apellido != null)
+            spec = spec.and(TecnicoRepository.Specs.apellidoLike(apellido));
+        if (idEspecialidades != null && !idEspecialidades.isEmpty())
+        {
+            idEspecialidades = idEspecialidades.stream().filter(Objects::nonNull).toList();
+            spec = spec.and(TecnicoRepository.Specs.hasEspecialidades(idEspecialidades));
+        }
 
         return tecnicoRepository.findAll(spec).stream()
                 .map(tecnicoResponseMapper)

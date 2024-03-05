@@ -3,9 +3,11 @@ package com.NatanielSanchez.SistemaReporteIncidentes.services;
 import com.NatanielSanchez.SistemaReporteIncidentes.controllers.requestDTOs.OperadorRequestDTO;
 import com.NatanielSanchez.SistemaReporteIncidentes.controllers.responseDTOs.ServicioResponseDTO;
 import com.NatanielSanchez.SistemaReporteIncidentes.controllers.responseDTOs.TecnicoResponseDTO;
+import com.NatanielSanchez.SistemaReporteIncidentes.exceptions.InvalidRequestParameterException;
 import com.NatanielSanchez.SistemaReporteIncidentes.exceptions.ResourceNotFoundException;
 import com.NatanielSanchez.SistemaReporteIncidentes.models.Cliente;
 import com.NatanielSanchez.SistemaReporteIncidentes.models.Problema;
+import com.NatanielSanchez.SistemaReporteIncidentes.models.Tecnico;
 import com.NatanielSanchez.SistemaReporteIncidentes.repositories.ClienteRepository;
 import com.NatanielSanchez.SistemaReporteIncidentes.repositories.ProblemaRepository;
 import com.NatanielSanchez.SistemaReporteIncidentes.repositories.ServicioRepository;
@@ -13,6 +15,7 @@ import com.NatanielSanchez.SistemaReporteIncidentes.repositories.TecnicoReposito
 import com.NatanielSanchez.SistemaReporteIncidentes.services.mappers.ServicioResponseMapper;
 import com.NatanielSanchez.SistemaReporteIncidentes.services.mappers.TecnicoResponseMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -49,17 +52,31 @@ public class OperadorService
                 .toList();
     }
 
-    public List<TecnicoResponseDTO> buscarTecnico(OperadorRequestDTO dto)
+    public List<TecnicoResponseDTO> buscarTecnico(List<Long> idProblemas)
     {
+        if (idProblemas == null || idProblemas.isEmpty())
+            throw new InvalidRequestParameterException("Se necesita al menos una ID.");
+
         List<Problema> problemas = new ArrayList<>();
-        for (Long id : dto.getIdProblemas())
-        {
-            problemas.add( problemaRepository.findById(id)
-                    .orElseThrow(()-> new ResourceNotFoundException("PROBLEMA ID: " + id)) );
-        }
+        idProblemas.forEach(
+                id-> problemas.add( problemaRepository.findById(id)
+                        .orElseThrow(()-> new ResourceNotFoundException("PROBLEMA ID: " + id)))
+        );
 
         return tecnicoRepository.findAll().stream()
                 .filter( t-> t.puedeResolverProblemas(problemas) )
+                .map(tecnicoResponseMapper)
+                .toList();
+    }
+
+    public List<TecnicoResponseDTO> buscarTecnicoConSpecs(List<Long> idProblemas)
+    {
+        Specification<Tecnico> spec = Specification.where(null);
+        if ( idProblemas != null && !idProblemas.isEmpty() )
+            spec = spec.and(TecnicoRepository.Specs.puedeResolverProblemas(idProblemas));
+        else throw new InvalidRequestParameterException("Se necesita al menos una ID.");
+
+        return tecnicoRepository.findAll(spec).stream()
                 .map(tecnicoResponseMapper)
                 .toList();
     }

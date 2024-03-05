@@ -32,9 +32,9 @@ public class OperadorController
     @GetMapping("/buscarTecnico")
     @ResponseBody
     public ResponseEntity<List<TecnicoResponseDTO>>
-        buscarTecnico(@RequestParam(name = "id_problemas") List<Long> id_problemas)
+        buscarTecnico(@RequestParam(name = "id_problemas") List<Long> idProblemas)
     {
-        OperadorRequestDTO dto = new OperadorRequestDTO(id_problemas);
-        return new ResponseEntity<>(service.buscarTecnico(dto), HttpStatus.OK);
+        return new ResponseEntity<>(service.buscarTecnico(idProblemas), HttpStatus.OK);
+        //return new ResponseEntity<>(service.buscarTecnicoConSpecs(idProblemas), HttpStatus.OK);
     }
 }
