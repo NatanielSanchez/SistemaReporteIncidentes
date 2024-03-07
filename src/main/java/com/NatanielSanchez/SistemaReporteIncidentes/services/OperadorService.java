@@ -1,6 +1,5 @@
 package com.NatanielSanchez.SistemaReporteIncidentes.services;
 
-import com.NatanielSanchez.SistemaReporteIncidentes.controllers.requestDTOs.OperadorRequestDTO;
 import com.NatanielSanchez.SistemaReporteIncidentes.controllers.responseDTOs.ServicioResponseDTO;
 import com.NatanielSanchez.SistemaReporteIncidentes.controllers.responseDTOs.TecnicoResponseDTO;
 import com.NatanielSanchez.SistemaReporteIncidentes.exceptions.InvalidRequestParameterException;
@@ -69,6 +68,7 @@ public class OperadorService
                 .toList();
     }
 
+    // Hace lo mismo que el método de arriba, pero con Specifications
     public List<TecnicoResponseDTO> buscarTecnicoConSpecs(List<Long> idProblemas)
     {
         Specification<Tecnico> spec = Specification.where(null);

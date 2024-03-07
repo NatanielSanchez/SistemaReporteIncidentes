@@ -13,6 +13,7 @@ import com.NatanielSanchez.SistemaReporteIncidentes.repositories.TipoContactoRep
 import com.NatanielSanchez.SistemaReporteIncidentes.services.mappers.ClienteResponseMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,6 +50,21 @@ public class ClienteService
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente ID: " + id));
 
         return clienteResponseMapper.apply(cliente);
+    }
+
+    public List<ClienteResponseDTO> getClientesFiltrado(String nombre, String identificacion, String tipo)
+    {
+        Specification<Cliente> spec = Specification.where(null);
+        if (nombre != null)
+            spec = spec.and(ClienteRepository.Specs.nombreLike(nombre));
+        if (identificacion != null)
+            spec = spec.and(ClienteRepository.Specs.identificacionLike(identificacion));
+        if (tipo != null)
+            spec = spec.and(ClienteRepository.Specs.tipoClienteLike(tipo));
+
+        return clienteRepository.findAll(spec).stream()
+                .map(clienteResponseMapper)
+                .toList();
     }
 
     @Transactional

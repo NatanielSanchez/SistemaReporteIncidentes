@@ -25,30 +25,39 @@ public class ClienteController
     @GetMapping("")
     public ResponseEntity<List<ClienteResponseDTO>> getAllClientes()
     {
-        return new ResponseEntity<List<ClienteResponseDTO>>(service.getAllClientes(), HttpStatus.OK);
+        return new ResponseEntity<>(service.getAllClientes(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ClienteResponseDTO> getClienteById(@PathVariable Long id)
     {
-        return new ResponseEntity<ClienteResponseDTO>(service.getClienteById(id), HttpStatus.OK);
+        return new ResponseEntity<>(service.getClienteById(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/filtros")
+    public ResponseEntity<List<ClienteResponseDTO>> getClientesFiltrado(
+            @RequestParam(name = "nombre", required = false) String nombre,
+            @RequestParam(name = "identificacion", required = false) String identificacion,
+            @RequestParam(name = "tipo", required = false) String tipo)
+    {
+        return new ResponseEntity<>(service.getClientesFiltrado(nombre, identificacion, tipo), HttpStatus.OK);
     }
 
     @PostMapping("")
     public ResponseEntity<ClienteResponseDTO> addCliente(@RequestBody ClienteRequestDTO dto)
     {
-        return new ResponseEntity<ClienteResponseDTO>(service.addCliente(dto), HttpStatus.OK);
+        return new ResponseEntity<>(service.addCliente(dto), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ClienteResponseDTO> updateCliente(@PathVariable Long id, @RequestBody ClienteRequestDTO dto)
     {
-        return new ResponseEntity<ClienteResponseDTO>(service.updateCliente(id, dto), HttpStatus.OK);
+        return new ResponseEntity<>(service.updateCliente(id, dto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ClienteResponseDTO> deleteCliente(@PathVariable Long id)
     {
-        return new ResponseEntity<ClienteResponseDTO>(service.deleteCliente(id), HttpStatus.OK);
+        return new ResponseEntity<>(service.deleteCliente(id), HttpStatus.OK);
     }
 }
