@@ -64,16 +64,28 @@ public interface TecnicoRepository extends JpaRepository<Tecnico, Long>, JpaSpec
         // filtra tecnicos que puedan resolver el conjunto de problemas
         static Specification<Tecnico> puedeResolverProblemas(List<Long> idProblemas)
         {
+            /*select t.* from tecnicos t
+                join tecnico_x_especialidad txe ON (t.id_tecnico = txe.id_tecnico)
+                join especialidades e ON (txe.id_especialidad = e.id_especialidad)
+                join especialidad_x_problema exp ON (exp.id_especialidad = e.id_especialidad)
+                WHERE exp.id_problema in (filtros)
+                GROUP BY t.id_tecnico
+                HAVING count(distinct exp.id_problema) = filtros.size;*/
+
             return (tecnico, cq, cb) -> {
                 // tecnico JOIN especialidad
                 Join<Tecnico, Especialidad> tecnicoEspecialidad = tecnico.join("especialidades", JoinType.INNER);
                 // tecnico JOIN especialidad JOIN problema
                 Join<Tecnico, Especialidad> especialidadProblema = tecnicoEspecialidad.join("problemas", JoinType.INNER);
 
-                List<Predicate> predicates = new ArrayList<>();
-                idProblemas.forEach( id-> predicates.add(cb.equal(especialidadProblema.get("idProblema"), id)) );
+                Predicate inClause = especialidadProblema.get("idProblema").in(idProblemas);
+                Predicate havingClause = cb.equal(
+                        cb.countDistinct(especialidadProblema.get("idProblema")), idProblemas.size()
+                );
 
-                return cb.and(predicates.toArray(new Predicate[0]));
+                //Here, we modify the current query so that it actually gets grouped.
+                cq.groupBy(tecnico.get("idTecnico")).having(havingClause);
+                return inClause;
             };
         }
     }

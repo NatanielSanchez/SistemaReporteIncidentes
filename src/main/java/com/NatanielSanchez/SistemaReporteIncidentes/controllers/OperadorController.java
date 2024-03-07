@@ -34,7 +34,7 @@ public class OperadorController
     public ResponseEntity<List<TecnicoResponseDTO>>
         buscarTecnico(@RequestParam(name = "id_problemas") List<Long> idProblemas)
     {
-        return new ResponseEntity<>(service.buscarTecnico(idProblemas), HttpStatus.OK);
-        //return new ResponseEntity<>(service.buscarTecnicoConSpecs(idProblemas), HttpStatus.OK);
+        //return new ResponseEntity<>(service.buscarTecnico(idProblemas), HttpStatus.OK);
+        return new ResponseEntity<>(service.buscarTecnicoConSpecs(idProblemas), HttpStatus.OK);
     }
 }
