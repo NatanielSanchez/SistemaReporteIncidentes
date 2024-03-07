@@ -8,6 +8,7 @@ import com.NatanielSanchez.SistemaReporteIncidentes.services.mappers.TipoContact
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLOutput;
 import java.util.List;
 
 @Service
@@ -27,6 +28,8 @@ public class ContactoService
 
     public List<TipoContactoResponseDTO> getAllTipoContactos()
     {
+
+
         return tipoContactoRepository.findAll().stream()
                 .map(tipoContactoResponseMapper)
                 .toList();

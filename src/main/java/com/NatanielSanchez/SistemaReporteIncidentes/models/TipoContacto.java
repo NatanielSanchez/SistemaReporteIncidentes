@@ -29,8 +29,10 @@ public class TipoContacto
 
     public boolean verificarContacto(String contacto)
     {
+
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(contacto);
+        
         return matcher.matches();
     }
 }

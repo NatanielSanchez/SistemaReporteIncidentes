@@ -100,6 +100,7 @@ public class TecnicoService
         return tecnicoResponseMapper.apply(tecnico);
     }
 
+    @Transactional
     public TecnicoResponseDTO deleteTecnico(Long id)
     {
         Tecnico tecnico = tecnicoRepository.findById(id)
@@ -112,9 +113,9 @@ public class TecnicoService
     public List<TecnicoResponseDTO> getTecnicosFiltrado(String nombre, String apellido, List<Long> idEspecialidades)
     {
         Specification<Tecnico> spec = Specification.where(null);
-        if (nombre != null)
+        if (nombre != null && !nombre.isEmpty())
             spec = spec.and(TecnicoRepository.Specs.nombreLike(nombre));
-        if (apellido != null)
+        if (apellido != null && !apellido.isEmpty())
             spec = spec.and(TecnicoRepository.Specs.apellidoLike(apellido));
         if (idEspecialidades != null && !idEspecialidades.isEmpty())
         {
